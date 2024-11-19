@@ -108,7 +108,7 @@ services:
       LVM_ENDPOINT: ${VIDEOQNA_LVM_ENDPOINT}
     restart: unless-stopped
     depends_on:
-      - lvm-video-llama
+      - videoqna-lvm-video-llama
   videoqna-backend-server:
     image: ${REGISTRY:-opea}/videoqna:${TAG:-latest}
     container_name: videoqna-backend-server

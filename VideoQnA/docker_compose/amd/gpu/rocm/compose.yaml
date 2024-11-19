@@ -33,7 +33,7 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     volumes:
-      - /home/$USER/.cache/huggingface/hub:/home/user/.cache/huggingface/hub
+      - /var/lib/GenAI/huggingface/hub:/home/user/.cache/huggingface/hub
     restart: unless-stopped
   videoqna-retriever:
     image: ${REGISTRY:-opea}/retriever-vdms:${TAG:-latest}
@@ -54,7 +54,7 @@ services:
     entrypoint: sh -c 'sleep 30 && python retriever_vdms.py'
     restart: unless-stopped
     volumes:
-      - /home/$USER/.cache/huggingface/hub:/home/user/.cache/huggingface/hub
+      - /var/lib/GenAI/huggingface/hub:/home/user/.cache/huggingface/hub
   videoqna-reranking:
     image: ${REGISTRY:-opea}/reranking-videoqna:${TAG:-latest}
     container_name: videoqna-reranking-videoqna-server

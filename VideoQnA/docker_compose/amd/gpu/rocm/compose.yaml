@@ -15,9 +15,9 @@ services:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
-      VDMS_HOST: ${VDMS_HOST}
-      VDMS_PORT: ${VDMS_PORT}
-      INDEX_NAME: ${INDEX_NAME}
+      VDMS_HOST: ${VIDEOQNA_VDMS_HOST}
+      VDMS_PORT: ${VIDEOQNA_VDMS_PORT}
+      INDEX_NAME: ${VIDEOQNA_INDEX_NAME}
     entrypoint: sh -c 'sleep 15 && python ingest_videos.py'
     volumes:
       - /home/$USER/.cache/clip:/home/user/.cache/clip
@@ -47,10 +47,10 @@ services:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
-      INDEX_NAME: ${INDEX_NAME}
-      VDMS_HOST: ${VDMS_HOST}
-      VDMS_PORT: ${VDMS_PORT}
-      USECLIP: ${USECLIP}
+      INDEX_NAME: ${VIDEOQNA_INDEX_NAME}
+      VDMS_HOST: ${VIDEOQNA_VDMS_HOST}
+      VDMS_PORT: ${VIDEOQNA_VDMS_PORT}
+      USECLIP: ${VIDEOQNA_USECLIP}
     entrypoint: sh -c 'sleep 30 && python retriever_vdms.py'
     restart: unless-stopped
     volumes:
@@ -66,8 +66,8 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
       CHUNK_DURATION: ${CHUNK_DURATION}
-      FILE_SERVER_ENDPOINT: ${DATAPREP_GET_FILE_ENDPOINT}
-      DATAPREP_GET_VIDEO_LIST_ENDPOINT: ${DATAPREP_GET_VIDEO_LIST_ENDPOINT}
+      FILE_SERVER_ENDPOINT: ${VIDEOQNA_DATAPREP_GET_FILE_ENDPOINT}
+      DATAPREP_GET_VIDEO_LIST_ENDPOINT: ${VIDEOQNA_DATAPREP_GET_VIDEO_LIST_ENDPOINT}
     restart: unless-stopped
   videoqna-lvm-video-llama:
     image: ghcr.io/huggingface/text-generation-inference:2.3.1-rocm
@@ -105,7 +105,7 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
       no_proxy: ${no_proxy}
-      LVM_ENDPOINT: ${LVM_ENDPOINT}
+      LVM_ENDPOINT: ${VIDEOQNA_LVM_ENDPOINT}
     restart: unless-stopped
     depends_on:
       - lvm-video-llama
@@ -127,11 +127,11 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
       no_proxy: ${no_proxy}
-      MEGA_SERVICE_HOST_IP: ${MEGA_SERVICE_HOST_IP}
-      EMBEDDING_SERVICE_HOST_IP: ${EMBEDDING_SERVICE_HOST_IP}
-      RETRIEVER_SERVICE_HOST_IP: ${RETRIEVER_SERVICE_HOST_IP}
-      RERANK_SERVICE_HOST_IP: ${RERANK_SERVICE_HOST_IP}
-      LVM_SERVICE_HOST_IP: ${LVM_SERVICE_HOST_IP}
+      MEGA_SERVICE_HOST_IP: ${VIDEOQNA_MEGA_SERVICE_HOST_IP}
+      EMBEDDING_SERVICE_HOST_IP: ${VIDEOQNA_EMBEDDING_SERVICE_HOST_IP}
+      RETRIEVER_SERVICE_HOST_IP: ${VIDEOQNA_RETRIEVER_SERVICE_HOST_IP}
+      RERANK_SERVICE_HOST_IP: ${VIDEOQNA_RERANK_SERVICE_HOST_IP}
+      LVM_SERVICE_HOST_IP: ${VIDEOQNA_LVM_SERVICE_HOST_IP}
     ipc: host
     restart: always
   videoqna-ui-server:
@@ -145,8 +145,8 @@ services:
       https_proxy: ${https_proxy}
       http_proxy: ${http_proxy}
       no_proxy: ${no_proxy}
-      BACKEND_SERVICE_ENDPOINT: ${BACKEND_SERVICE_ENDPOINT}
-      BACKEND_HEALTH_CHECK_ENDPOINT: ${BACKEND_HEALTH_CHECK_ENDPOINT}
+      BACKEND_SERVICE_ENDPOINT: ${VIDEOQNA_BACKEND_SERVICE_ENDPOINT}
+      BACKEND_HEALTH_CHECK_ENDPOINT: ${VIDEOQNA_BACKEND_HEALTH_CHECK_ENDPOINT}
     ipc: host
     restart: always
 volumes:

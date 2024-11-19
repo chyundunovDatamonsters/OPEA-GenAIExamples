@@ -70,13 +70,13 @@ services:
       DATAPREP_GET_VIDEO_LIST_ENDPOINT: ${VIDEOQNA_DATAPREP_GET_VIDEO_LIST_ENDPOINT}
     restart: unless-stopped
   videoqna-lvm-video-llama:
-    image: ghcr.io/huggingface/text-generation-inference:2.3.1-rocm
+    image: vllm-api-server
     container_name: videoqna-lvm-video-llama
     ports:
-      - "${VIDEOQNA_LVM_SERVICE_PORT:-9009}:80"
+      - "${VIDEOQNA_LVM_SERVICE_PORT:-9009}:8011"
     volumes:
       - "/var/lib/GenAI/videoqna/data:/data"
-    shm_size: 1g
+    shm_size: 128g
     environment:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
@@ -84,6 +84,10 @@ services:
       TGI_LLM_ENDPOINT: ${VIDEOQNA_LVM_ENDPOINT}
       HUGGING_FACE_HUB_TOKEN: ${VIDEOQNA_HUGGINGFACEHUB_API_TOKEN}
       HUGGINGFACEHUB_API_TOKEN: ${VIDEOQNA_HUGGINGFACEHUB_API_TOKEN}
+      HF_TOKEN: ${VIDEOQNA_HUGGINGFACEHUB_API_TOKEN}
+      WILM_USE_TRITON_FLASH_ATTENTION: '0'
+      PYTORCH_JIT: '0'
+      MODEL: ${VIDEOQNA_MODEL_ID}
     devices:
       - /dev/kfd:/dev/kfd
       - /dev/dri/:/dev/dri/
@@ -93,8 +97,9 @@ services:
       - video
     security_opt:
       - seccomp:unconfined
+      - apparmor:unconfined
     ipc: host
-    command: --model-id ${VIDEOQNA_MODEL_ID}
+    command: --model $MODEL --swap-space 16 --disable-log-requests --dtype float16 --tensor-parallel-size 4 --host 0.0.0.0 --port 8011 --num-scheduler-steps 1 --distributed-executor-backend "mp"
   videoqna-lvm:
     image: ${REGISTRY:-opea}/lvm-video-llama:${TAG:-latest}
     container_name: videoqna-lvm

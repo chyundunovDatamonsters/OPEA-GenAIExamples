@@ -94,7 +94,7 @@ services:
     security_opt:
       - seccomp:unconfined
     ipc: host
-    command: --model-id DAMO-NLP-SG/Video-LLaMA
+    command: --model-id ${VIDEOQNA_MODEL_ID}
   videoqna-lvm:
     image: ${REGISTRY:-opea}/lvm-video-llama:${TAG:-latest}
     container_name: videoqna-lvm

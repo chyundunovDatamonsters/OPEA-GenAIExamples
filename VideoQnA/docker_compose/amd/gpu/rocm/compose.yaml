@@ -97,7 +97,7 @@ services:
     command: --model-id DAMO-NLP-SG/Video-LLaMA
   videoqna-lvm:
     image: ${REGISTRY:-opea}/lvm-video-llama:${TAG:-latest}
-    container_name: videoqna-lvm-video-llama
+    container_name: videoqna-lvm
     ports:
       - "9000:9000"
     ipc: host

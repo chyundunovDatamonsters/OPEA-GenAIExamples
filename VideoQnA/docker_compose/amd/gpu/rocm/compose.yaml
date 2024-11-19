@@ -3,14 +3,14 @@ services:
     image: intellabs/vdms:v2.8.0
     container_name: videoqna-vdms-vector-db
     ports:
-      - "8001:55555"
+      - "18001:55555"
   videoqna-dataprep:
     image: ${REGISTRY:-opea}/dataprep-multimodal-vdms:${TAG:-latest}
     container_name: videoqna-dataprep-vdms-server
     depends_on:
       - videoqna-vdms-vector-db
     ports:
-      - "6007:6007"
+      - "16007:6007"
     environment:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
@@ -26,7 +26,7 @@ services:
     image: ${REGISTRY:-opea}/embedding-multimodal-clip:${TAG:-latest}
     container_name: videoqna-embedding-multimodal-server
     ports:
-      - "6000:6000"
+      - "16000:6000"
     ipc: host
     environment:
       no_proxy: ${no_proxy}
@@ -41,7 +41,7 @@ services:
     depends_on:
       - videoqna-vdms-vector-db
     ports:
-      - "7000:7000"
+      - "17000:7000"
     ipc: host
     environment:
       no_proxy: ${no_proxy}
@@ -59,7 +59,7 @@ services:
     image: ${REGISTRY:-opea}/reranking-videoqna:${TAG:-latest}
     container_name: videoqna-reranking-videoqna-server
     ports:
-      - "8000:8000"
+      - "18000:8000"
     ipc: host
     environment:
       no_proxy: ${no_proxy}
@@ -73,7 +73,7 @@ services:
     image: vllm-api-server
     container_name: videoqna-lvm-video-llama
     ports:
-      - "${VIDEOQNA_LVM_SERVICE_PORT:-9009}:8011"
+      - "${VIDEOQNA_LVM_SERVICE_PORT:-19009}:8011"
     volumes:
       - "/var/lib/GenAI/videoqna/data:/data"
     shm_size: 128g
@@ -104,7 +104,7 @@ services:
     image: ${REGISTRY:-opea}/lvm-video-llama:${TAG:-latest}
     container_name: videoqna-lvm
     ports:
-      - "9000:9000"
+      - "19000:9000"
     ipc: host
     environment:
       http_proxy: ${http_proxy}
@@ -126,7 +126,7 @@ services:
       - videoqna-lvm-video-llama
       - videoqna-lvm
     ports:
-      - "8888:8888"
+      - "18888:8888"
     entrypoint: sh -c 'sleep 45 && python videoqna.py'
     environment:
       http_proxy: ${http_proxy}
@@ -145,7 +145,7 @@ services:
     depends_on:
       - videoqna-backend-server
     ports:
-      - "5173:5173"
+      - "15173:5173"
     environment:
       https_proxy: ${https_proxy}
       http_proxy: ${http_proxy}

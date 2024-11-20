@@ -78,7 +78,9 @@ services:
     ports:
       - "${VIDEOQNA_LVM_SERVICE_PORT:-19009}:8011"
     volumes:
-      - "/var/lib/GenAI/videoqna/data:/data"
+      - /var/lib/GenAI/videoqna/data:/data
+      - /home/$USER/.cache:/home/user/.cache
+      - video-llama-model:/home/user/model
     shm_size: 128g
     environment:
       no_proxy: ${no_proxy}

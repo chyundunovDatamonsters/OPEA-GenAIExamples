@@ -15,7 +15,7 @@ export VIDEOQNA_BACKEND_HEALTH_CHECK_ENDPOINT="http://${host_ip}:18888/v1/health
 export VIDEOQNA_DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:16007/v1/dataprep"
 export VIDEOQNA_DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:16007/v1/dataprep/get_file"
 export VIDEOQNA_DATAPREP_GET_VIDEO_LIST_ENDPOINT="http://${host_ip}:16007/v1/dataprep/get_videos"
-export VIDEOQNA_TRANSFORMERS_CACHE="/home/user/.cache"
+export VIDEOQNA_TRANSFORMERS_CACHE="/var/lib/.cache"
 
 export VIDEOQNA_VDMS_HOST=${host_ip}
 export VIDEOQNA_VDMS_PORT=18001

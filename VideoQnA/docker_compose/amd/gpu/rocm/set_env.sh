@@ -8,7 +8,7 @@ export VIDEOQNA_RETRIEVER_SERVICE_HOST_IP=${host_ip}
 export VIDEOQNA_RERANK_SERVICE_HOST_IP=${host_ip}
 export VIDEOQNA_LVM_SERVICE_HOST_IP=${host_ip}
 
-export VIDEOQNA_MODEL_ID="DAMO-NLP-SG/VideoLLaMA2.1-7B-16F"
+export VIDEOQNA_MODEL_ID="google/deplot"
 export VIDEOQNA_LVM_ENDPOINT="http://${host_ip}:19009"
 export VIDEOQNA_BACKEND_SERVICE_ENDPOINT="http://${host_ip}:18888/v1/videoqna"
 export VIDEOQNA_BACKEND_HEALTH_CHECK_ENDPOINT="http://${host_ip}:18888/v1/health_check"

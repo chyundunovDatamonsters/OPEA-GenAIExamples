@@ -22,3 +22,4 @@ export VIDEOQNA_VDMS_PORT=18001
 export VIDEOQNA_INDEX_NAME="mega-videoqna"
 export VIDEOQNA_USECLIP=1
 export VIDEOQNA_LLM_DOWNLOAD="True" # Set to "False" before redeploy LVM server to avoid model download
+

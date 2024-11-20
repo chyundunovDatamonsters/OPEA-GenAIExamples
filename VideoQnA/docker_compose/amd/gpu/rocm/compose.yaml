@@ -80,7 +80,7 @@ services:
     volumes:
       - /var/lib/GenAI/videoqna/data:/data
       - /home/$USER/.cache:/home/user/.cache
-      - video-llama-model:/home/user/model
+#      - video-llama-model:/home/user/model
     shm_size: 128g
     environment:
       no_proxy: ${no_proxy}

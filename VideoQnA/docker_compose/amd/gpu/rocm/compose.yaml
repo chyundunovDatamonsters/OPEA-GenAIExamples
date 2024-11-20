@@ -21,8 +21,8 @@ services:
       TRANSFORMERS_CACHE: ${VIDEOQNA_TRANSFORMERS_CACHE}
     entrypoint: sh -c 'sleep 15 && python ingest_videos.py'
     volumes:
-      - /var/lib/huggingface/.cache/clip:${VIDEOQNA_TRANSFORMERS_CACHE}/clip
-      - /var/lib/huggingface/.cache/huggingface/hub:${VIDEOQNA_TRANSFORMERS_CACHE}/huggingface/hub
+      - /var/lib/huggingface/.cache/clip:/home/$USER/.cache/clip
+      - /var/lib/huggingface/.cache/huggingface/hub:/home/$USER/.cache/huggingface/hub
   videoqna-embedding:
     image: ${REGISTRY:-opea}/embedding-multimodal-clip:${TAG:-latest}
     container_name: videoqna-embedding-multimodal-server
@@ -35,7 +35,7 @@ services:
       https_proxy: ${https_proxy}
       TRANSFORMERS_CACHE: ${VIDEOQNA_TRANSFORMERS_CACHE}
     volumes:
-      - /var/lib/huggingface/.cache/huggingface/hub:${VIDEOQNA_TRANSFORMERS_CACHE}/huggingface/hub
+      - /var/lib/huggingface/.cache/huggingface/hub:/home/$USER/.cache/huggingface/hub
     restart: unless-stopped
   videoqna-retriever:
     image: ${REGISTRY:-opea}/retriever-vdms:${TAG:-latest}
@@ -57,7 +57,7 @@ services:
     entrypoint: sh -c 'sleep 30 && python retriever_vdms.py'
     restart: unless-stopped
     volumes:
-      - /var/lib/huggingface/.cache/huggingface/hub:${VIDEOQNA_TRANSFORMERS_CACHE}/huggingface/hub
+      - /var/lib/huggingface/.cache/huggingface/hub:/home/$USER/.cache/huggingface/hub
   videoqna-reranking:
     image: ${REGISTRY:-opea}/reranking-videoqna:${TAG:-latest}
     container_name: videoqna-reranking-videoqna-server

@@ -18,6 +18,7 @@ services:
       VDMS_HOST: ${VIDEOQNA_VDMS_HOST}
       VDMS_PORT: ${VIDEOQNA_VDMS_PORT}
       INDEX_NAME: ${VIDEOQNA_INDEX_NAME}
+      TRANSFORMERS_CACHE: ${VIDEOQNA_TRANSFORMERS_CACHE}
     entrypoint: sh -c 'sleep 15 && python ingest_videos.py'
     volumes:
       - /var/.cache/clip:${VIDEOQNA_TRANSFORMERS_CACHE}/clip
@@ -32,6 +33,7 @@ services:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
+      TRANSFORMERS_CACHE: ${VIDEOQNA_TRANSFORMERS_CACHE}
     volumes:
       - /var/.cache/huggingface/hub:${VIDEOQNA_TRANSFORMERS_CACHE}/huggingface/hub
     restart: unless-stopped
@@ -51,6 +53,7 @@ services:
       VDMS_HOST: ${VIDEOQNA_VDMS_HOST}
       VDMS_PORT: ${VIDEOQNA_VDMS_PORT}
       USECLIP: ${VIDEOQNA_USECLIP}
+      TRANSFORMERS_CACHE: ${VIDEOQNA_TRANSFORMERS_CACHE}
     entrypoint: sh -c 'sleep 30 && python retriever_vdms.py'
     restart: unless-stopped
     volumes:

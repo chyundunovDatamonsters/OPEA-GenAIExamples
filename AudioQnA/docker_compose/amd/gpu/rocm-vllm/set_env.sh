@@ -11,7 +11,7 @@ export AUDIOQNA_HUGGINGFACEHUB_API_TOKEN=${HUGGINGFACEHUB_API_TOKEN}
 # <token>
 
 export AUDIOQNA_VLLM_ENDPOINT=http://$host_ip:3006
-export AUDIOQNA_LLM_MODEL_ID=Intel/neural-chat-7b-v3-3
+export AUDIOQNA_LLM_MODEL_ID=meta-llama/Meta-Llama-3-8B-Instruct
 
 export AUDIOQNA_ASR_ENDPOINT=http://$host_ip:7066
 export AUDIOQNA_TTS_ENDPOINT=http://$host_ip:7055

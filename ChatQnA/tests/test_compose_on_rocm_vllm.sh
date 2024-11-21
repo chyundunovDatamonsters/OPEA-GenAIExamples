@@ -182,7 +182,7 @@ function validate_microservices() {
     # tgi for llm service
     validate_service \
         "${ip_address}:9009/v1/chat/completions" \
-        "generated_text" \
+        "\"content\":\"" \
         "chatqna-vllm-service" \
         "chatqna-vllm-service" \
         '{"model": "meta-llama/Meta-Llama-3-8B-Instruct", "messages": [{"role": "user", "content": "What is Deep Learning?"}]}'

@@ -138,14 +138,14 @@ function validate_microservices() {
     validate_service \
         "http://${ip_address}:6007/v1/dataprep" \
         "Data preparation succeeded" \
-        "dataprep_upload_link" \
+        "dataprep_upload_file" \
         "chatqna-dataprep-redis-service"
 
     # test /v1/dataprep upload link
     validate_service \
         "http://${ip_address}:6007/v1/dataprep" \
         "Data preparation succeeded" \
-        "chatqna-dataprep-redis-service" \
+        "dataprep_upload_link" \
         "chatqna-dataprep-redis-service"
 
     # test /v1/dataprep/get_file

@@ -82,7 +82,7 @@ services:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
-      TGI_LLM_ENDPOINT: ${TGI_LLM_ENDPOINT}
+      TGI_LLM_ENDPOINT: ${AUDIOQNA_VLLM_ENDPOINT}
       HUGGINGFACEHUB_API_TOKEN: ${AUDIOQNA_HUGGINGFACEHUB_API_TOKEN}
     restart: unless-stopped
   audioqna-backend-server:

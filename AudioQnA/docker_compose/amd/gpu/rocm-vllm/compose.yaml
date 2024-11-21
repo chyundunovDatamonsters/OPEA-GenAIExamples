@@ -1,0 +1,113 @@
+# Copyright (C) 2024 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+services:
+  audioqna-whisper-service:
+    image: ${REGISTRY:-opea}/whisper:${TAG:-latest}
+    container_name: audioqna-whisper-service
+    ports:
+      - "7066:7066"
+    ipc: host
+    environment:
+      no_proxy: ${no_proxy}
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+    restart: unless-stopped
+  audioqna-asr:
+    image: ${REGISTRY:-opea}/asr:${TAG:-latest}
+    container_name: audioqna-asr-service
+    ports:
+      - "3001:9099"
+    ipc: host
+    environment:
+      ASR_ENDPOINT: ${AUDIOQNA_ASR_ENDPOINT}
+  audioqna-speecht5-service:
+    image: ${REGISTRY:-opea}/speecht5:${TAG:-latest}
+    container_name: audioqna-speecht5-service
+    ports:
+      - "7055:7055"
+    ipc: host
+    environment:
+      no_proxy: ${no_proxy}
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+    restart: unless-stopped
+  audioqna-tts:
+    image: ${REGISTRY:-opea}/tts:${TAG:-latest}
+    container_name: audioqna-tts-service
+    ports:
+      - "3002:9088"
+    ipc: host
+    environment:
+      TTS_ENDPOINT: ${AUDIOQNA_TTS_ENDPOINT}
+  audioqna-vllm-service:
+    image: ${REGISTRY:-opea}/llm-vllm-rocm:${TAG:-latest}
+    container_name: audioqna-vllm-service
+    ports:
+      - "3006:8011"
+    volumes:
+     - "/var/lib/GenAI/data:/data"
+    shm_size: 128g
+    devices:
+      - /dev/kfd:/dev/kfd
+      - /dev/dri/:/dev/dri/
+    environment:
+      no_proxy: ${no_proxy}
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+      HUGGINGFACEHUB_API_TOKEN: ${AUDIOQNA_HUGGINGFACEHUB_API_TOKEN}
+      HF_TOKEN: ${AUDIOQNA_HUGGINGFACEHUB_API_TOKEN}
+      HF_HUB_DISABLE_PROGRESS_BARS: 1
+      HF_HUB_ENABLE_HF_TRANSFER: 0
+      WILM_USE_TRITON_FLASH_ATTENTION: 0
+      PYTORCH_JIT: 0
+    command: "--model ${AUDIOQNA_LLM_MODEL_ID} --swap-space 16 --disable-log-requests --dtype float16 --tensor-parallel-size 4 --host 0.0.0.0 --port 8011 --num-scheduler-steps 1 --distributed-executor-backend \"mp\""
+    cap_add:
+      - SYS_PTRACE
+    group_add:
+      - video
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    ipc: host
+  audioqna-llm:
+    image: ${REGISTRY:-opea}/llm-tgi:${TAG:-latest}
+    container_name: audioqna-llm
+    depends_on:
+      - audioqna-vllm-service
+    ports:
+      - "3007:9000"
+    ipc: host
+    environment:
+      no_proxy: ${no_proxy}
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+      TGI_LLM_ENDPOINT: ${TGI_LLM_ENDPOINT}
+      HUGGINGFACEHUB_API_TOKEN: ${AUDIOQNA_HUGGINGFACEHUB_API_TOKEN}
+    restart: unless-stopped
+  audioqna-backend-server:
+    image: ${REGISTRY:-opea}/audioqna:${TAG:-latest}
+    container_name: audioqna-backend-server
+    depends_on:
+      - audioqna-asr
+      - audioqna-llm
+      - audioqna-tts
+    ports:
+      - "3008:8888"
+    environment:
+      - no_proxy=${no_proxy}
+      - https_proxy=${https_proxy}
+      - http_proxy=${http_proxy}
+      - MEGA_SERVICE_HOST_IP=${AUDIOQNA_MEGA_SERVICE_HOST_IP}
+      - ASR_SERVICE_HOST_IP=${AUDIOQNA_ASR_SERVICE_HOST_IP}
+      - ASR_SERVICE_PORT=${AUDIOQNA_ASR_SERVICE_PORT}
+      - LLM_SERVICE_HOST_IP=${AUDIOQNA_LLM_SERVICE_HOST_IP}
+      - LLM_SERVICE_PORT=${AUDIOQNA_LLM_SERVICE_PORT}
+      - TTS_SERVICE_HOST_IP=${AUDIOQNA_TTS_SERVICE_HOST_IP}
+      - TTS_SERVICE_PORT=${AUDIOQNA_TTS_SERVICE_PORT}
+    ipc: host
+    restart: always
+
+networks:
+  default:
+    driver: bridge

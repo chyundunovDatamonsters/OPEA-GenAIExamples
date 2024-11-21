@@ -73,7 +73,7 @@ function start_services() {
         if grep -q "Application startup complete" "${LOG_PATH}"/chatqna-vllm-service_start.log; then
             break
         fi
-        sleep 1s
+        sleep 20s
         n=$((n+1))
     done
 }

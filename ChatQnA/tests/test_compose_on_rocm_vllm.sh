@@ -138,7 +138,7 @@ function validate_microservices() {
     validate_service \
         "http://${ip_address}:6007/v1/dataprep" \
         "Data preparation succeeded" \
-        "chatqna-dataprep-redis-service" \
+        "dataprep_upload_link" \
         "chatqna-dataprep-redis-service"
 
     # test /v1/dataprep upload link
@@ -152,14 +152,14 @@ function validate_microservices() {
     validate_service \
         "http://${ip_address}:6007/v1/dataprep/get_file" \
         '{"name":' \
-        "chatqna-dataprep-redis-service" \
+        "dataprep_get" \
         "chatqna-dataprep-redis-service"
 
     # test /v1/dataprep/delete_file
     validate_service \
         "http://${ip_address}:6007/v1/dataprep/delete_file" \
         '{"status":true}' \
-        "chatqna-dataprep-redis-service" \
+        "dataprep_del" \
         "chatqna-dataprep-redis-service"
 
     # retrieval microservice
@@ -181,11 +181,11 @@ function validate_microservices() {
 
     # tgi for llm service
     validate_service \
-        "${ip_address}:9009/generate" \
+        "${ip_address}:9009/v1/chat/completions" \
         "generated_text" \
         "chatqna-vllm-service" \
         "chatqna-vllm-service" \
-        '{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":17, "do_sample": true}}'
+        '{"model": "meta-llama/Meta-Llama-3-8B-Instruct", "messages": [{"role": "user", "content": "What is Deep Learning?"}]}'
 
 }
 
@@ -238,7 +238,7 @@ function stop_docker() {
 function main() {
 
     stop_docker
-    if [[ "$IMAGE_REPO" == "opea" ]]; then build_docker_images; fi
+#    if [[ "$IMAGE_REPO" == "opea" ]]; then build_docker_images; fi
     start_time=$(date +%s)
     start_services
     end_time=$(date +%s)

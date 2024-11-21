@@ -104,7 +104,6 @@ services:
       HF_HUB_ENABLE_HF_TRANSFER: 0
       WILM_USE_TRITON_FLASH_ATTENTION: 0
       PYTORCH_JIT: 0
-      MODEL: ${CHATQNA_LLM_MODEL_ID}
     volumes:
       - "/var/opea/chatqna-service/data:/data"
     shm_size: 128G
@@ -118,7 +117,7 @@ services:
     security_opt:
       - seccomp:unconfined
       - apparmor=unconfined
-    command: "--model $MODEL --swap-space 16 --disable-log-requests --dtype float16 --tensor-parallel-size 4 --host 0.0.0.0 --port 8011 --num-scheduler-steps 1 --distributed-executor-backend \"mp\""
+    command: "--model ${CHATQNA_LLM_MODEL_ID} --swap-space 16 --disable-log-requests --dtype float16 --tensor-parallel-size 4 --host 0.0.0.0 --port 8011 --num-scheduler-steps 1 --distributed-executor-backend \"mp\""
     ipc: host
   chatqna-backend-server:
     image: ${REGISTRY:-opea}/chatqna:${TAG:-latest}

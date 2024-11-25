@@ -80,8 +80,7 @@ services:
     image: ${REGISTRY:-opea}/translation:${TAG:-latest}
     container_name: translation-backend-server
     depends_on:
-      - translation-tgi-service
-      - translation-llm
+      - translation-vllm-service
     ports:
       - "${TRANSLATION_BACKEND_SERVICE_PORT:-8888}:8888"
     environment:

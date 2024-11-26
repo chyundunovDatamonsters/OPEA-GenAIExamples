@@ -29,7 +29,7 @@ services:
 #    ipc: host
 #    command: --model-id ${TRANSLATIONS_LLM_MODEL_ID}
   translation-vllm-service:
-    image: ${REGISTRY:-opea}/llm-vllm-rocm:${TAG:-latest}
+    image: ${REGISTRY:-opea}/llm-vllm-rocm:new-api
     container_name: translation-vllm-service
     ports:
       - "${TRANSLATION_VLLM_SERVICE_PORT:-8008}:8011"

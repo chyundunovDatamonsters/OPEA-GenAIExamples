@@ -63,7 +63,7 @@ services:
     image: ${REGISTRY:-opea}/llm-tgi:${TAG:-latest}
     container_name: translation-llm-tgi-server
     depends_on:
-      - translation-tgi-service
+      - translation-vllm-service
     ports:
       - "9000:9000"
     ipc: host

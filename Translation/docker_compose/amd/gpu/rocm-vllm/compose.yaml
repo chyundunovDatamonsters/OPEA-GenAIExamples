@@ -2,32 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 services:
-#  translation-tgi-service:
-#    image: ghcr.io/huggingface/text-generation-inference:2.3.1-rocm
-#    container_name: translation-tgi-service
-#    ports:
-#      - "${TRANSLATIONS_TGI_SERVICE_PORT:-8008}:80"
-#    volumes:
-#      - "/var/lib/GenAI/translation/data:/data"
-#    shm_size: 8g
-#    environment:
-#      no_proxy: ${no_proxy}
-#      http_proxy: ${http_proxy}
-#      https_proxy: ${https_proxy}
-#      TGI_LLM_ENDPOINT: ${TRANSLATIONS_TGI_LLM_ENDPOINT}
-#      HUGGING_FACE_HUB_TOKEN: ${TRANSLATIONS_HUGGINGFACEHUB_API_TOKEN}
-#      HUGGINGFACEHUB_API_TOKEN: ${TRANSLATIONS_HUGGINGFACEHUB_API_TOKEN}
-#    devices:
-#      - /dev/kfd:/dev/kfd
-#      - /dev/dri/:/dev/dri/
-#    cap_add:
-#      - SYS_PTRACE
-#    group_add:
-#      - video
-#    security_opt:
-#      - seccomp:unconfined
-#    ipc: host
-#    command: --model-id ${TRANSLATIONS_LLM_MODEL_ID}
   translation-vllm-service:
     image: ${REGISTRY:-opea}/llm-vllm-rocm:new-api
     container_name: translation-vllm-service
@@ -58,7 +32,6 @@ services:
       - apparmor=unconfined
     command: "--model ${TRANSLATION_LLM_MODEL_ID} --swap-space 16 --disable-log-requests --dtype float16 --tensor-parallel-size 4 --host 0.0.0.0 --port 8011 --num-scheduler-steps 1 --distributed-executor-backend \"mp\""
     ipc: host
-
   translation-llm:
     image: ${REGISTRY:-opea}/llm-tgi:${TAG:-latest}
     container_name: translation-llm-tgi-server

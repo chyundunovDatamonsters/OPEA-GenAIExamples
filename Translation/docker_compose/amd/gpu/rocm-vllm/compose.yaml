@@ -32,7 +32,7 @@ services:
     image: ${REGISTRY:-opea}/llm-vllm-rocm:${TAG:-latest}
     container_name: translation-vllm-service
     ports:
-      - "${TRANSLATION_VLLM_SERVICE_PORT:-9000}:8011"
+      - "${TRANSLATION_VLLM_SERVICE_PORT:-8008}:8011"
     environment:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
@@ -59,23 +59,23 @@ services:
     command: "--model ${TRANSLATION_LLM_MODEL_ID} --swap-space 16 --disable-log-requests --dtype float16 --tensor-parallel-size 4 --host 0.0.0.0 --port 8011 --num-scheduler-steps 1 --distributed-executor-backend \"mp\""
     ipc: host
 
-#  translation-llm:
-#    image: ${REGISTRY:-opea}/llm-tgi:${TAG:-latest}
-#    container_name: translation-llm-tgi-server
-#    depends_on:
-#      - translation-tgi-service
-#    ports:
-#      - "9000:9000"
-#    ipc: host
-#    environment:
-#      no_proxy: ${no_proxy}
-#      http_proxy: ${http_proxy}
-#      https_proxy: ${https_proxy}
-#      TGI_LLM_ENDPOINT: ${TRANSLATION_TGI_LLM_ENDPOINT}
-#      HUGGINGFACEHUB_API_TOKEN: ${TRANSLATION_HUGGINGFACEHUB_API_TOKEN}
-#      HF_HUB_DISABLE_PROGRESS_BARS: 1
-#      HF_HUB_ENABLE_HF_TRANSFER: 0
-#    restart: unless-stopped
+  translation-llm:
+    image: ${REGISTRY:-opea}/llm-tgi:${TAG:-latest}
+    container_name: translation-llm-tgi-server
+    depends_on:
+      - translation-tgi-service
+    ports:
+      - "9000:9000"
+    ipc: host
+    environment:
+      no_proxy: ${no_proxy}
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+      TGI_LLM_ENDPOINT: ${TRANSLATION_VLLM_ENDPOINT}
+      HUGGINGFACEHUB_API_TOKEN: ${TRANSLATION_HUGGINGFACEHUB_API_TOKEN}
+      HF_HUB_DISABLE_PROGRESS_BARS: 1
+      HF_HUB_ENABLE_HF_TRANSFER: 0
+    restart: unless-stopped
   translation-backend-server:
     image: ${REGISTRY:-opea}/translation:${TAG:-latest}
     container_name: translation-backend-server

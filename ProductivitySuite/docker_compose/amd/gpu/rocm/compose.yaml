@@ -312,7 +312,7 @@ services:
       - tgi_service
       - llm_docsum_server
     ports:
-      - "${BACKEND_SERVICE_ENDPOINT_DOCSUM:-8890}:8888"
+      - "${BACKEND_SERVICE_ENDPOINT_DOCSUM_PORT:-8890}:8888"
     environment:
       no_proxy: ${no_proxy}
       https_proxy: ${https_proxy}
@@ -326,7 +326,7 @@ services:
     image: mongo:7.0.11
     container_name: mongodb
     ports:
-      - 27017:27017
+      - "27017:27017"
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}

@@ -19,7 +19,7 @@ services:
     depends_on:
       - redis-vector-db
     ports:
-      - "6007:6007"
+      - "${DATAPREP_DELETE_FILE_ENDPOINT_PORT:-6007}:6007"
     environment:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
@@ -174,7 +174,7 @@ services:
       - reranking
       - llm
     ports:
-      - "8888:8888"
+      - "${BACKEND_SERVICE_ENDPOINT_CHATQNA_PORT:-8888}:8888"
     environment:
       no_proxy: ${no_proxy}
       https_proxy: ${https_proxy}
@@ -242,7 +242,7 @@ services:
     depends_on:
       - llm
     ports:
-      - "7778:7778"
+      - "${BACKEND_SERVICE_ENDPOINT_CODEGEN_PORT:-7778}:7778"
     environment:
       no_proxy: ${no_proxy}
       https_proxy: ${https_proxy}
@@ -277,7 +277,7 @@ services:
       - tgi_service
       - llm_faqgen
     ports:
-      - "8889:8888"
+      - "${BACKEND_SERVICE_ENDPOINT_FAQGEN_PORT:-8889}:8888"
     environment:
       no_proxy: ${no_proxy}
       https_proxy: ${https_proxy}
@@ -312,7 +312,7 @@ services:
       - tgi_service
       - llm_docsum_server
     ports:
-      - "8890:8888"
+      - "${BACKEND_SERVICE_ENDPOINT_DOCSUM:-8890}:8888"
     environment:
       no_proxy: ${no_proxy}
       https_proxy: ${https_proxy}

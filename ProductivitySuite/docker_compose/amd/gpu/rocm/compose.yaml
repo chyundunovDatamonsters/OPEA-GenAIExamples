@@ -366,7 +366,7 @@ services:
     image: quay.io/keycloak/keycloak:25.0.2
     container_name: keycloak-server
     ports:
-      - 8080:8080
+      - "${PRODUCTIVITYSUITE_KEYCLOAK_PORT:-8080}:8080"
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin

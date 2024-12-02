@@ -379,7 +379,7 @@ services:
     image: ${REGISTRY:-opea}/productivity-suite-react-ui-server:${TAG:-latest}
     container_name: productivity-suite-xeon-react-ui-server
     ports:
-      - "5174:80"
+      - "${PRODUCTIVITYSUITE_UI_PORT:-5174}:80"
     environment:
       - APP_BACKEND_SERVICE_ENDPOINT_CHATQNA=${BACKEND_SERVICE_ENDPOINT_CHATQNA}
       - APP_BACKEND_SERVICE_ENDPOINT_CODEGEN=${BACKEND_SERVICE_ENDPOINT_CODEGEN}

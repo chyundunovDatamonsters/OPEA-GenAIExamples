@@ -1,15 +1,5 @@
 # 🔐 Keycloak Configuration Setup
 
-cd /opt/keycloak/bin
-
-./kcadm.sh config credentials --server http://localhost:8080 --realm master --user admin --password admin
-
-./kcadm.sh update realms/master -s sslRequired=NONE
-
-create realm productivitysuite
-
-./kcadm.sh update realms/productivitysuite -s sslRequired=NONE
-
 This README document provides a comprehensive, step-by-step guide on how to configure **Keycloak** settings. The user management is facilitated via Keycloak, and the configuration is outlined below:
 
 1. Access the Keycloak admin console via url http:${host_ip}:8080 or endpoint that is exposed from your Kubernetes cluster to configure users. Use the default username(**admin**) and password(**admin**) to login.

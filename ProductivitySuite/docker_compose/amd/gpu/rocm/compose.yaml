@@ -19,7 +19,7 @@ services:
     depends_on:
       - redis-vector-db
     ports:
-      - "${DATAPREP_DELETE_FILE_ENDPOINT_PORT:-6007}:6007"
+      - "${DATAPREP_SERVICE_ENDPOINT_PORT:-6007}:6007"
     environment:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}

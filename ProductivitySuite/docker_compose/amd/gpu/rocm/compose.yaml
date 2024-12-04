@@ -338,7 +338,7 @@ services:
     image: ${REGISTRY:-opea}/chathistory-mongo-server:${TAG:-latest}
     container_name: chathistory-mongo-server
     ports:
-      - "6012:6012"
+      - "${CHAT_HISTORY_ENDPOINT_PORT:-6012}:6012"
     ipc: host
     environment:
       http_proxy: ${http_proxy}
@@ -346,14 +346,14 @@ services:
       https_proxy: ${https_proxy}
       MONGO_HOST: ${MONGO_HOST}
       MONGO_PORT: ${MONGO_PORT}
-      COLLECTION_NAME: ${COLLECTION_NAME}
+      COLLECTION_NAME: ${PROMPT_COLLECTION_NAME}
     restart: unless-stopped
 
   promptregistry-mongo:
     image: ${REGISTRY:-opea}/promptregistry-mongo-server:${TAG:-latest}
     container_name: promptregistry-mongo-server
     ports:
-      - "6018:6018"
+      - "${PROMPT_SERVICE_ENDPOINT_PORT:-6018}:6018"
     ipc: host
     environment:
       http_proxy: ${http_proxy}

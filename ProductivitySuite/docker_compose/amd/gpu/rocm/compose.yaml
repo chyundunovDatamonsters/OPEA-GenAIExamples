@@ -372,6 +372,8 @@ services:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_PROXY=edge
+    volumes:
+      - /var/lib/GenAI/keycloak/data/:/opt/keycloak/data/
     ipc: host
     command: start-dev
     restart: always

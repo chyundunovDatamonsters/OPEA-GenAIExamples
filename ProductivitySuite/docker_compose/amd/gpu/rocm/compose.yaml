@@ -95,7 +95,7 @@ services:
     command: --model-id ${RERANK_MODEL_ID} --auto-truncate
   reranking:
     image: ${REGISTRY:-opea}/reranking-tei:${TAG:-latest}
-    container_name: reranking-tei-xeon-server
+    container_name: reranking-tei-server
     depends_on:
       - tei-reranking-service
     ports:

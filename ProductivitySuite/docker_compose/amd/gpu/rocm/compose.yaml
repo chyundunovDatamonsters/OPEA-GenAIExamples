@@ -275,7 +275,7 @@ services:
     restart: unless-stopped
   faqgen-backend-server:
     image: ${REGISTRY:-opea}/faqgen:${TAG:-latest}
-    container_name: faqgen-xeon-backend-server
+    container_name: faqgen-backend-server
     depends_on:
       - tgi_service
       - llm_faqgen

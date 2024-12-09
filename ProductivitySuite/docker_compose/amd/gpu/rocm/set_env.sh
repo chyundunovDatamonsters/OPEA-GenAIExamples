@@ -68,3 +68,8 @@ export KEYCLOAK_SERVICE_ENDPOINT="http://${host_ip_external}:${PRODUCTIVITYSUITE
 
 export PROMPT_COLLECTION_NAME="prompt"
 
+export V2A_SERVICE_HOST_IP=${host_ip}
+export V2A_ENDPOINT=http://$host_ip:7078
+export A2T_ENDPOINT=http://$host_ip:7066
+export A2T_SERVICE_HOST_IP=${host_ip}
+export A2T_SERVICE_PORT=9099

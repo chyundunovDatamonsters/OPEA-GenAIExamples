@@ -36,16 +36,6 @@ services:
     ports:
       - "${DOCSUM_LLM_SERVER_PORT}:9000"
     ipc: host
-    group_add:
-      - video
-    security_opt:
-      - seccomp:unconfined
-    cap_add:
-      - SYS_PTRACE
-    devices:
-      - /dev/kfd:/dev/kfd
-      - /dev/dri/${DOCSUM_CARD_ID}:/dev/dri/${DOCSUM_CARD_ID}
-      - /dev/dri/${DOCSUM_RENDER_ID}:/dev/dri/${DOCSUM_RENDER_ID}
     environment:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
@@ -53,6 +43,42 @@ services:
       TGI_LLM_ENDPOINT: "http://${HOST_IP}:${DOCSUM_TGI_SERVICE_PORT}"
       HUGGINGFACEHUB_API_TOKEN: ${DOCSUM_HUGGINGFACEHUB_API_TOKEN}
     restart: unless-stopped
+  whisper:
+    image: ${REGISTRY:-opea}/whisper:${TAG:-latest}
+    container_name: whisper-service
+    ports:
+      - "7066:7066"
+    ipc: host
+    environment:
+      no_proxy: ${no_proxy}
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+    restart: unless-stopped
+  dataprep-audio2text:
+    image: ${REGISTRY:-opea}/dataprep-audio2text:${TAG:-latest}
+    container_name: dataprep-audio2text-service
+    ports:
+      - "9099:9099"
+    ipc: host
+    environment:
+      A2T_ENDPOINT: ${A2T_ENDPOINT}
+  dataprep-video2audio:
+    image: ${REGISTRY:-opea}/dataprep-video2audio:${TAG:-latest}
+    container_name: dataprep-video2audio-service
+    ports:
+      - "7078:7078"
+    ipc: host
+    environment:
+      V2A_ENDPOINT: ${V2A_ENDPOINT}
+  dataprep-multimedia2text:
+    image: ${REGISTRY:-opea}/dataprep-multimedia2text:${TAG:-latest}
+    container_name: dataprep-multimedia2text
+    ports:
+      - "7079:7079"
+    ipc: host
+    environment:
+      V2A_ENDPOINT: ${V2A_ENDPOINT}
+      A2T_ENDPOINT: ${A2T_ENDPOINT}
   docsum-backend-server:
     image: ${REGISTRY:-opea}/docsum:${TAG:-latest}
     container_name: docsum-backend-server

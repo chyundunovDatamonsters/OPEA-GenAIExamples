@@ -63,7 +63,7 @@ const FaqGen = () => {
 //     }
     const formData = new FormData();
     formData.append("type", "text")
-    formData.append("messages", fileContent : value)
+    formData.append("messages", isFile ? fileContent : value)
     formData.append("max_tokens", "1000")
     formData.append("language", "en")
     formData.append("stream", "true")
@@ -72,7 +72,7 @@ const FaqGen = () => {
     fetchEventSource(FAQ_GEN_URL, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             "Accept": "*/*"
         },
         body: formData,

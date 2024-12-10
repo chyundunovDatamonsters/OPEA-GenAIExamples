@@ -71,8 +71,6 @@ const FaqGen = () => {
             "Content-Type": "multipart/form-data",
             "Accept": "*/*"
         },
-        const formData = new FormData();
-        formData.append("messages", isFile ? fileContent : value)
         body: formData,
         openWhenHidden: true,
         async onopen(response) {

@@ -68,7 +68,7 @@ const FaqGen = () => {
     fetchEventSource(FAQ_GEN_URL, {
         method: "POST",
         headers: {
-            "Content-Type": "undefined",
+            "Content-Type": "multipart/form-data",
             "Accept": "*/*"
         },
         body: formData,

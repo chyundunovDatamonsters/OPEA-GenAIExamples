@@ -71,7 +71,7 @@ const FaqGen = () => {
             "Content-Type": "multipart/form-data",
             "Accept": "*/*"
         },
-        body: JSON.stringify(formData),
+        body: formData,
         openWhenHidden: true,
         async onopen(response) {
             if (response.ok) {

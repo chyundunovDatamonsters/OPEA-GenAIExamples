@@ -14,7 +14,7 @@ const FaqGen = () => {
     const [files, setFiles] = useState<FileWithPath[]>([])
     const [isGenerating, setIsGenerating] = useState<boolean>(false);
     const [value, setValue] = useState<string>('');
-//     const [fileContent, setFileContent] = useState<string>('');
+    const [fileContent, setFileContent] = useState<string>('');
     const [response, setResponse] = useState<string>('');
     
     let messagesEnd:HTMLDivElement;
@@ -62,7 +62,7 @@ const FaqGen = () => {
 //             messages: isFile ? fileContent : value
 //     }
     const formData = new FormData();
-    formData.append("messages", "Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5.")
+    formData.append("messages", fileContent)
 
 
     fetchEventSource(FAQ_GEN_URL, {

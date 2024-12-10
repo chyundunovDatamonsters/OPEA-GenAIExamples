@@ -64,9 +64,6 @@ const FaqGen = () => {
     const formData = new FormData();
     formData.append("type", "text")
     formData.append("messages", isFile ? fileContent : value)
-    formData.append("max_tokens", "1000")
-    formData.append("language", "en")
-    formData.append("stream", "true")
 
 
     fetchEventSource(FAQ_GEN_URL, {

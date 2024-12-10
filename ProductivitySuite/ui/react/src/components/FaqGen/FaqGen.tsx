@@ -60,6 +60,7 @@ const FaqGen = () => {
 
     const formData = new FormData();
     formData.append("messages", isFile ? fileContent : value)
+    formData.append("stream", "false")
 
     setIsGenerating(true)
         const body = formData

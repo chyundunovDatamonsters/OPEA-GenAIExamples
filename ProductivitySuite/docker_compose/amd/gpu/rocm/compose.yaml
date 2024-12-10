@@ -417,7 +417,7 @@ services:
     restart: always
 
   productivity-suite-react-ui-server:
-    image: ${REGISTRY:-opea}/productivity-suite-react-ui-server:${TAG:-latest}
+    image: ${REGISTRY:-opea}/productivity-suite-react-ui-server:fix1
     container_name: productivity-suite-react-ui-server
     ports:
       - "${PRODUCTIVITYSUITE_UI_PORT:-5174}:80"

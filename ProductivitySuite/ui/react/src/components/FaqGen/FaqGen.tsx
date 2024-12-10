@@ -57,17 +57,25 @@ const FaqGen = () => {
         return 
     }
 
-    setIsGenerating(true)
-    const body = {
-            messages: isFile ? fileContent : value
-    }
+//     setIsGenerating(true)
+//     const body = {
+//             messages: isFile ? fileContent : value
+//     }
+    const formData = new FormData();
+    formData.append("type", "text")
+    formData.append("messages", fileContent : value)
+    formData.append("max_tokens", "1000")
+    formData.append("language", "en")
+    formData.append("stream", "true")
+
+
     fetchEventSource(FAQ_GEN_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "Accept": "*/*"
         },
-        body: JSON.stringify(body),
+        body: formData,
         openWhenHidden: true,
         async onopen(response) {
             if (response.ok) {

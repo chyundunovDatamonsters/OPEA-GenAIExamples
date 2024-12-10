@@ -418,7 +418,7 @@ services:
 
   productivity-suite-react-ui-server:
     image: ${REGISTRY:-opea}/productivity-suite-react-ui-server:${TAG:-latest}
-    container_name: productivity-suite-xeon-react-ui-server
+    container_name: productivity-suite-react-ui-server
     ports:
       - "${PRODUCTIVITYSUITE_UI_PORT:-5174}:80"
     environment:

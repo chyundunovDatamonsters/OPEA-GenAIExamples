@@ -62,7 +62,6 @@ const FaqGen = () => {
 //             messages: isFile ? fileContent : value
 //     }
     const formData = new FormData();
-    formData.append("type", "text")
     formData.append("messages", isFile ? fileContent : value)
 
 
@@ -72,6 +71,8 @@ const FaqGen = () => {
             "Content-Type": "multipart/form-data",
             "Accept": "*/*"
         },
+        const formData = new FormData();
+        formData.append("messages", isFile ? fileContent : value)
         body: formData,
         openWhenHidden: true,
         async onopen(response) {

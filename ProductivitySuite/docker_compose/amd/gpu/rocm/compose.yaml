@@ -255,7 +255,7 @@ services:
     ipc: host
     restart: always
   llm_faqgen:
-    image: ${REGISTRY:-opea}/llm-faqgen-tgi:${TAG:-latest}
+    image: ${REGISTRY:-opea}/llm-tgi:${TAG:-latest}
     container_name: llm-faqgen-server
     depends_on:
       - tgi_service
@@ -268,10 +268,6 @@ services:
       https_proxy: ${https_proxy}
       TGI_LLM_ENDPOINT: ${TGI_LLM_ENDPOINT_FAQGEN}
       HUGGINGFACEHUB_API_TOKEN: ${HUGGINGFACEHUB_API_TOKEN}
-      LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY}
-      LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2}
-      LANGCHAIN_PROJECT: "opea-llm-service"
-      LANGCHAIN_ENDPOINT: ${LANGCHAIN_ENDPOINT}
     restart: unless-stopped
   faqgen-backend-server:
     image: ${REGISTRY:-opea}/faqgen:${TAG:-latest}
@@ -291,7 +287,7 @@ services:
     ipc: host
     restart: always
   llm_docsum_server:
-    image: ${REGISTRY:-opea}/llm-docsum-tgi:${TAG:-latest}
+    image: ${REGISTRY:-opea}/llm-tgi:${TAG:-latest}
     container_name: llm-docsum-server
     depends_on:
       - tgi_service

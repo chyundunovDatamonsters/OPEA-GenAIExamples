@@ -47,12 +47,11 @@ const DocSum = () => {
     }
 
     const formData = new FormData();
-    formData.append("type", "text")
+//     formData.append("type", "text")
     formData.append("messages", isFile ? fileContent : value)
-    formData.append("stream", "false")
+    formData.append("stream", "true")
 
     setIsGenerating(true)
-
     const body = formData
 
     fetchEventSource(DOC_SUM_URL, {

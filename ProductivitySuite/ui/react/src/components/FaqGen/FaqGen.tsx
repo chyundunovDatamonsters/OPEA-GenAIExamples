@@ -62,7 +62,7 @@ const FaqGen = () => {
 //             messages: isFile ? fileContent : value
 //     }
     const formData = new FormData();
-    formData.append("messages", value)
+    formData.append("messages", isFile ? fileContent : value)
 
 
     fetchEventSource(FAQ_GEN_URL, {

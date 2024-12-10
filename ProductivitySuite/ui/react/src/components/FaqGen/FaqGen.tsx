@@ -14,7 +14,7 @@ const FaqGen = () => {
     const [files, setFiles] = useState<FileWithPath[]>([])
     const [isGenerating, setIsGenerating] = useState<boolean>(false);
     const [value, setValue] = useState<string>('');
-    const [fileContent, setFileContent] = useState<string>('');
+//     const [fileContent, setFileContent] = useState<string>('');
     const [response, setResponse] = useState<string>('');
     
     let messagesEnd:HTMLDivElement;

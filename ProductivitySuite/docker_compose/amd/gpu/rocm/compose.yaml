@@ -351,6 +351,9 @@ services:
     depends_on:
       - tgi_service
       - llm_docsum_server
+      - dataprep-multimedia2text
+      - dataprep-video2audio
+      - dataprep-audio2text
     ports:
       - "${BACKEND_SERVICE_ENDPOINT_DOCSUM_PORT:-8890}:8888"
     environment:

@@ -64,6 +64,7 @@ const FaqGen = () => {
     const formData = new FormData();
     formData.append("messages", isFile ? fileContent : value)
 
+    console.log(isFile ? fileContent : value);
 
     fetchEventSource(FAQ_GEN_URL, {
         method: "POST",

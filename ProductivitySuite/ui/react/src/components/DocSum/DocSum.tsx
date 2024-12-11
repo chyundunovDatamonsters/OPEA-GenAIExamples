@@ -49,7 +49,7 @@ const DocSum = () => {
     const formData = new FormData();
     formData.append("type", "text")
     formData.append("messages", isFile ? fileContent : value)
-    formData.append("stream", "true")
+    formData.append("stream", "false")
 
     setIsGenerating(true)
     const body = formData

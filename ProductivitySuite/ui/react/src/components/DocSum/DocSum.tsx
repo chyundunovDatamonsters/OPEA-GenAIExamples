@@ -54,6 +54,43 @@ const DocSum = () => {
     setIsGenerating(true)
     const body = formData
 
+    async function* streamGenerator() {
+      if (!response.body) {
+        throw new Error("Response body is null");
+      }
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let done, value;
+
+      let buffer = ""; // Initialize a buffer
+
+      while (({ done, value } = await reader.read())) {
+        if (done) break;
+
+        // Decode chunk and append to buffer
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        // Use regex to clean and extract data
+        const cleanedChunks = buffer
+          .split("\n")
+          .map((line) => {
+            // Remove 'data: b' at the start and ' ' at the end
+            return line.replace(/^data:\s*|^b'|'\s*$/g, "").trim(); // Clean unnecessary characters
+          })
+          .filter((line) => line); // Remove empty lines
+
+        for (const cleanedChunk of cleanedChunks) {
+          // Further clean to ensure all unnecessary parts are removed
+          yield cleanedChunk.replace(/^b'|['"]$/g, ""); // Again clean 'b' and other single or double quotes
+        }
+
+        // If there is an incomplete message in the current buffer, keep it
+        buffer = buffer.endsWith("\n") ? "" : cleanedChunks.pop() || ""; // Keep the last incomplete part
+      }
+    }
+
+
     fetchEventSource(DOC_SUM_URL, {
         method: "POST",
         headers: {
@@ -74,41 +111,6 @@ const DocSum = () => {
             }
         },
 
-        async function* streamGenerator() {
-          if (!response.body) {
-            throw new Error("Response body is null");
-          }
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder("utf-8");
-          let done, value;
-
-          let buffer = ""; // Initialize a buffer
-
-          while (({ done, value } = await reader.read())) {
-            if (done) break;
-
-            // Decode chunk and append to buffer
-            const chunk = decoder.decode(value, { stream: true });
-            buffer += chunk;
-
-            // Use regex to clean and extract data
-            const cleanedChunks = buffer
-              .split("\n")
-              .map((line) => {
-                // Remove 'data: b' at the start and ' ' at the end
-                return line.replace(/^data:\s*|^b'|'\s*$/g, "").trim(); // Clean unnecessary characters
-              })
-              .filter((line) => line); // Remove empty lines
-
-            for (const cleanedChunk of cleanedChunks) {
-              // Further clean to ensure all unnecessary parts are removed
-              yield cleanedChunk.replace(/^b'|['"]$/g, ""); // Again clean 'b' and other single or double quotes
-            }
-
-            // If there is an incomplete message in the current buffer, keep it
-            buffer = buffer.endsWith("\n") ? "" : cleanedChunks.pop() || ""; // Keep the last incomplete part
-          }
-        }
 
         onmessage(msg) {
             response = streamGenerator()

@@ -55,10 +55,10 @@ const DocSum = () => {
     const body = formData
 
     async function* streamGenerator() {
-      if (!response.body) {
+      if (!msg.body) {
         throw new Error("Response body is null");
       }
-      const reader = response.body.getReader();
+      const reader = msg.body.getReader();
       const decoder = new TextDecoder("utf-8");
       let done, value;
 

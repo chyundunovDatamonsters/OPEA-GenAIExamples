@@ -88,7 +88,7 @@ const DocSum = () => {
 //                                setResponse(prev=>prev+log.value);
 //                             }
 //                         }
-                    }
+                    });
                 } catch (e) {
                     console.log("something wrong in msg", e);
                     throw e;

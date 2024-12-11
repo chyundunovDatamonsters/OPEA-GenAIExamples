@@ -77,6 +77,7 @@ const DocSum = () => {
             if (msg?.data != "[DONE]") {
                 try {
                     const res = JSON.parse(msg.data)
+                    console.log(res)
                     const logs = res.ops;
                     logs.forEach((log: { op: string; path: string; value: string }) => {
                         if (log.op === "add") {

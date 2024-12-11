@@ -80,10 +80,10 @@ const DocSum = () => {
 
         onmessage(msg) {
             async function* streamGenerator() {
-              if (!msg.body) {
+              if (!msg.data) {
                 throw new Error("Response body is null");
               }
-              const reader = msg.body.getReader();
+              const reader = msg.data.getReader();
               const decoder = new TextDecoder("utf-8");
               let done, value;
 

@@ -76,12 +76,10 @@ const DocSum = () => {
         onmessage(msg) {
             if (msg?.data != "[DONE]") {
                 try {
-                    const res = msg
-                    console.log(res)
-//                     const res = JSON.parse(msg.data)
-//                     console.log(res)
-//                     const logs = res.ops;
-//                     logs.forEach((log: { op: string; path: string; value: string }) => {
+                    const res = JSON.parse(msg)
+//                     const logs = res.data;
+                    res.forEach((data}) => {
+                        console.log(res.data)
 //                         if (log.op === "add") {
 //                             if (
 //                                 log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
@@ -89,7 +87,7 @@ const DocSum = () => {
 //                                setResponse(prev=>prev+log.value);
 //                             }
 //                         }
-//                     });
+                    });
                 } catch (e) {
                     console.log("something wrong in msg", e);
                     throw e;

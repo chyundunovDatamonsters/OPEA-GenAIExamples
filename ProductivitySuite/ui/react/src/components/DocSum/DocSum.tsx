@@ -79,7 +79,7 @@ const DocSum = () => {
                     const res = msg
                     console.log(res)
                     const logs = res.data;
-                    logs.forEach((log) => {
+                    logs.forEach((log: res.data) => {
                         console.log(log)
 //                         if (log.op === "add") {
 //                             if (

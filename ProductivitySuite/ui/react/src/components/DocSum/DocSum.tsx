@@ -144,7 +144,8 @@ const DocSum = () => {
                     <div>
                         <Button loading={isGenerating} loaderProps={{ type: 'dots' }} onClick={handleSubmit}>Generate Summary</Button>
                     </div>
-                    {(
+
+                    {response="test content" && (
                         <div className={styleClasses.docSumResult}>
                             <Markdown content="test content" />
                         </div>

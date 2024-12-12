@@ -75,7 +75,7 @@ const DocSum = () => {
             }
         },
         onmessage(msg) {
-            console.log(msg.choices)
+            console.log(msg)
             if (msg?.data != "[DONE]") {
                 try {
                     const res = JSON.parse(msg.data)
@@ -146,7 +146,7 @@ const DocSum = () => {
                     </div>
                     {response && (
                         <div className={styleClasses.docSumResult}>
-                            <Markdown content={response} />
+                            <Markdown content="test content" />
                         </div>
                     )}
 

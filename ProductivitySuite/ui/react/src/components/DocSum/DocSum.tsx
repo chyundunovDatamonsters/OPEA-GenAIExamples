@@ -65,9 +65,7 @@ const DocSum = () => {
         openWhenHidden: true,
         async onopen(response) {
             if (response.ok) {
-                console.log(response.json)
                 return;
-
             } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
                 const e = await response.json();
                 console.log(e);
@@ -77,6 +75,7 @@ const DocSum = () => {
             }
         },
         onmessage(msg) {
+            console.log(msg)
             if (msg?.data != "[DONE]") {
                 try {
                     const res = JSON.parse(msg.data)

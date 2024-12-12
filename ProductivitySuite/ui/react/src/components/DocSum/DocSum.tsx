@@ -65,8 +65,9 @@ const DocSum = () => {
         openWhenHidden: true,
         async onopen(response) {
             if (response.ok) {
-                return;
                 console.log(response)
+                return;
+
             } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
                 const e = await response.json();
                 console.log(e);

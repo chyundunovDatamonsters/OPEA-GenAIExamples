@@ -77,6 +77,7 @@ const DocSum = () => {
         onmessage(msg) {
             console.log(msg)
             setResponse("test content");
+            console.log(response)
 //             if (msg?.data != "[DONE]") {
 //                 try {
 //                     const res = JSON.parse(msg.data)

@@ -49,9 +49,10 @@ const DocSum = () => {
     const formData = new FormData();
     formData.append("type", "text")
     formData.append("messages", isFile ? fileContent : value)
-    formData.append("stream", "true")
+    formData.append("stream", "false")
 
     setIsGenerating(true)
+
     const body = formData
 
     fetchEventSource(DOC_SUM_URL, {
@@ -65,6 +66,7 @@ const DocSum = () => {
         async onopen(response) {
             if (response.ok) {
                 return;
+                console.log(body)
             } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
                 const e = await response.json();
                 console.log(e);
@@ -73,58 +75,19 @@ const DocSum = () => {
                 console.log("error", response);
             }
         },
-
-        async function* streamGenerator() {
-          if (!response.body) {
-            throw new Error("Response body is null");
-          }
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder("utf-8");
-          let done, value;
-
-          let buffer = ""; // Initialize a buffer
-
-          while (({ done, value } = await reader.read())) {
-            if (done) break;
-
-            // Decode chunk and append to buffer
-            const chunk = decoder.decode(value, { stream: true });
-            buffer += chunk;
-
-            // Use regex to clean and extract data
-            const cleanedChunks = buffer
-              .split("\n")
-              .map((line) => {
-                // Remove 'data: b' at the start and ' ' at the end
-                return line.replace(/^data:\s*|^b'|'\s*$/g, "").trim(); // Clean unnecessary characters
-              })
-              .filter((line) => line); // Remove empty lines
-
-            for (const cleanedChunk of cleanedChunks) {
-              // Further clean to ensure all unnecessary parts are removed
-              yield cleanedChunk.replace(/^b'|['"]$/g, ""); // Again clean 'b' and other single or double quotes
-            }
-
-            // If there is an incomplete message in the current buffer, keep it
-            buffer = buffer.endsWith("\n") ? "" : cleanedChunks.pop() || ""; // Keep the last incomplete part
-          }
-        }
-
         onmessage(msg) {
             if (msg?.data != "[DONE]") {
                 try {
-                    const res = msg
-                    console.log(res)
-//                     const logs = res.data;
-                    res.forEach((data: ) => {
-                        console.log(log)
-//                         if (log.op === "add") {
-//                             if (
-//                                 log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
-//                             ) {
-//                                setResponse(prev=>prev+log.value);
-//                             }
-//                         }
+                    const res = JSON.parse(msg.data)
+                    const logs = res.ops;
+                    logs.forEach((log: { op: string; path: string; value: string }) => {
+                        if (log.op === "add") {
+                            if (
+                                log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
+                            ) {
+                               setResponse(prev=>prev+log.value);
+                            }
+                        }
                     });
                 } catch (e) {
                     console.log("something wrong in msg", e);
@@ -134,11 +97,11 @@ const DocSum = () => {
         },
         onerror(err) {
             console.log("error", err);
-            setIsGenerating(false) 
+            setIsGenerating(false)
             throw err;
         },
         onclose() {
-           setIsGenerating(false) 
+           setIsGenerating(false)
         },
     });
 }
@@ -186,7 +149,7 @@ const DocSum = () => {
                             <Markdown content={response} />
                         </div>
                     )}
-                    
+
                 </div>
             </div>
         </div >

@@ -66,7 +66,7 @@ const DocSum = () => {
         async onopen(response) {
             if (response.ok) {
                 return;
-                console.log(body)
+                console.log(response)
             } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
                 const e = await response.json();
                 console.log(e);

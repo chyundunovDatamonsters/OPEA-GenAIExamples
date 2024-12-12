@@ -85,7 +85,7 @@ const DocSum = () => {
                             if (
                                 log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
                             ) {
-                               setResponse(prev=>prev+log.value);
+                               setResponse("test content");
                             }
                         }
                     });
@@ -144,8 +144,7 @@ const DocSum = () => {
                     <div>
                         <Button loading={isGenerating} loaderProps={{ type: 'dots' }} onClick={handleSubmit}>Generate Summary</Button>
                     </div>
-
-                    {response="test content" && (
+                    {response && (
                         <div className={styleClasses.docSumResult}>
                             <Markdown content="test content" />
                         </div>

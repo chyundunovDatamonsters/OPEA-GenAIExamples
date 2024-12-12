@@ -147,7 +147,7 @@ const DocSum = () => {
                     </div>
                     {response && (
                         <div className={styleClasses.docSumResult}>
-                            <Markdown content="test content" />
+                            <Markdown content={response} />
                         </div>
                     )}
 

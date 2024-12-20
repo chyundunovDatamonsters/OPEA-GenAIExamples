@@ -43,17 +43,17 @@ services:
       TTS_ENDPOINT: ${TTS_ENDPOINT}
   tgi-service:
     image: ghcr.io/huggingface/text-generation-inference:2.3.1-rocm
-    container_name: codegen-tgi-service
+    container_name: tgi-service
     ports:
-      - "${TGI_SERVICE_PORT:-8028}:80"
+      - "${TGI_SERVICE_PORT:-3006}:80"
     volumes:
-      - "/var/lib/GenAI/data:/data"
+      - "./data:/data"
     environment:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
-      HUGGING_FACE_HUB_TOKEN: ${CODEGEN_HUGGINGFACEHUB_API_TOKEN}
-      HUGGINGFACEHUB_API_TOKEN: ${CODEGEN_HUGGINGFACEHUB_API_TOKEN}
+      HUGGING_FACE_HUB_TOKEN: ${HUGGINGFACEHUB_API_TOKEN}
+      HUGGINGFACEHUB_API_TOKEN: ${HUGGINGFACEHUB_API_TOKEN}
     shm_size: 1g
     devices:
       - /dev/kfd:/dev/kfd
@@ -65,7 +65,7 @@ services:
     security_opt:
       - seccomp:unconfined
     ipc: host
-    command: --model-id ${CODEGEN_LLM_MODEL_ID} --max-input-length 1024 --max-total-tokens 2048
+    command: --model-id ${LLM_MODEL_ID} --max-input-length 2048 --max-total-tokens 4096
   llm:
     image: ${REGISTRY:-opea}/llm-tgi:${TAG:-latest}
     container_name: llm-tgi-server
@@ -117,9 +117,9 @@ services:
       https_proxy: ${https_proxy}
       WAV2LIP_ENDPOINT: ${WAV2LIP_ENDPOINT}
     restart: unless-stopped
-  avatarchatbot-xeon-backend-server:
+  avatarchatbot-backend-server:
     image: ${REGISTRY:-opea}/avatarchatbot:${TAG:-latest}
-    container_name: avatarchatbot-xeon-backend-server
+    container_name: avatarchatbot-backend-server
     depends_on:
       - asr
       - llm
@@ -128,19 +128,19 @@ services:
     ports:
       - "3009:8888"
     environment:
-      - no_proxy=${no_proxy}
-      - https_proxy=${https_proxy}
-      - http_proxy=${http_proxy}
-      - MEGA_SERVICE_HOST_IP=${MEGA_SERVICE_HOST_IP}
-      - MEGA_SERVICE_PORT=${MEGA_SERVICE_PORT}
-      - ASR_SERVICE_HOST_IP=${ASR_SERVICE_HOST_IP}
-      - ASR_SERVICE_PORT=${ASR_SERVICE_PORT}
-      - LLM_SERVICE_HOST_IP=${LLM_SERVICE_HOST_IP}
-      - LLM_SERVICE_PORT=${LLM_SERVICE_PORT}
-      - TTS_SERVICE_HOST_IP=${TTS_SERVICE_HOST_IP}
-      - TTS_SERVICE_PORT=${TTS_SERVICE_PORT}
-      - ANIMATION_SERVICE_HOST_IP=${ANIMATION_SERVICE_HOST_IP}
-      - ANIMATION_SERVICE_PORT=${ANIMATION_SERVICE_PORT}
+      no_proxy: ${no_proxy}
+      https_proxy: ${https_proxy}
+      http_proxy: ${http_proxy}
+      MEGA_SERVICE_HOST_IP: ${MEGA_SERVICE_HOST_IP}
+      MEGA_SERVICE_PORT: ${MEGA_SERVICE_PORT}
+      ASR_SERVICE_HOST_IP: ${ASR_SERVICE_HOST_IP}
+      ASR_SERVICE_PORT: ${ASR_SERVICE_PORT}
+      LLM_SERVICE_HOST_IP: ${LLM_SERVICE_HOST_IP}
+      LLM_SERVICE_PORT: ${LLM_SERVICE_PORT}
+      TTS_SERVICE_HOST_IP: ${TTS_SERVICE_HOST_IP}
+      TTS_SERVICE_PORT: ${TTS_SERVICE_PORT}
+      ANIMATION_SERVICE_HOST_IP: ${ANIMATION_SERVICE_HOST_IP}
+      ANIMATION_SERVICE_PORT: ${ANIMATION_SERVICE_PORT}
     ipc: host
     restart: always
 

@@ -85,7 +85,7 @@ const DocSum = () => {
                             if (
                                 log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
                             ) {
-                               setResponse("test content");
+                               setResponse(prev=>prev+log.value);
                             }
                         }
                     });

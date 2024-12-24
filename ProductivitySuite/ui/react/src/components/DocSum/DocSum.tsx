@@ -93,6 +93,7 @@ const DocSum = () => {
                     throw e;
                 }
             }
+            console.log(response)
         },
         onerror(err) {
             console.log("error", err);

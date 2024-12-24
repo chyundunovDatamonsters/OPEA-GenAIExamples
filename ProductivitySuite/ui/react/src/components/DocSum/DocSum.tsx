@@ -75,26 +75,25 @@ const DocSum = () => {
             }
         },
         onmessage(msg) {
-//             setResponse("test content");
-            if (msg?.data != "[DONE]") {
-                try {
-                    const res = JSON.parse(msg.data)
-                    const logs = res.ops;
-                    logs.forEach((log: { op: string; path: string; value: string }) => {
-                        if (log.op === "add") {
-                            if (
-                                log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
-                            ) {
-                               setResponse(prev=>prev+log.value);
-                            }
+                    if (msg?.data != "[DONE]") {
+                        try {
+                            const res = JSON.parse(msg.data)
+                            const logs = res.ops;
+                            logs.forEach((log: { ops: string; path: string; value: string }) => {
+                                if (log.op === "add") {
+                                    if (
+                                        log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
+                                    ) {
+                                       setResponse(prev=>prev+log.value);
+                                    }
+                                }
+                            });
+                        } catch (e) {
+                            console.log("something wrong in msg", e);
+                            throw e;
                         }
-                    });
-                } catch (e) {
-                    console.log("something wrong in msg", e);
-                    throw e;
-                }
-            }
-        },
+                    }
+                },
         onerror(err) {
             console.log("error", err);
             setIsGenerating(false)

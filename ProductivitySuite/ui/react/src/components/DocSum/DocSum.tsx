@@ -46,17 +46,22 @@ const DocSum = () => {
         return 
     }
 
+    const formData = new FormData();
+    formData.append("type", "text")
+    formData.append("messages", isFile ? fileContent : value)
+    formData.append("stream", "true")
+
     setIsGenerating(true)
-    const body = {
-            messages: isFile ? fileContent : value
-    }
+
+    const body = formData
+
     fetchEventSource(DOC_SUM_URL, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+//             "Content-Type": "application/json",
             "Accept": "*/*"
         },
-        body: JSON.stringify(body),
+        body: body,
         openWhenHidden: true,
         async onopen(response) {
             if (response.ok) {

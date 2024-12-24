@@ -107,7 +107,7 @@ const DocSum = () => {
     });
 }
 
-    console.log("test___" + response)
+    console.log("test___", response)
     return (
         <div className={styleClasses.docSumWrapper}>
             <div className={styleClasses.docSumContent}>

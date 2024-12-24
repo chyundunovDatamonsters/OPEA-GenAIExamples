@@ -75,12 +75,13 @@ const DocSum = () => {
             }
         },
         onmessage(msg) {
-            console.log(msg)
+//             console.log(msg)
             if (msg?.data != "[DONE]") {
                 try {
                     const res = JSON.parse(msg.data)
                     const logs = res.ops;
                     logs.forEach((log: { op: string; path: string; value: string }) => {
+                        console.log(log.op)
                         if (log.op === "add") {
                             if (
                                 log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
@@ -107,7 +108,7 @@ const DocSum = () => {
     });
 }
 
-    console.log("test___", response)
+//     console.log("test___", response)
     return (
         <div className={styleClasses.docSumWrapper}>
             <div className={styleClasses.docSumContent}>

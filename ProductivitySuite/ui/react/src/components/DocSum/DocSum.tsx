@@ -46,22 +46,17 @@ const DocSum = () => {
         return 
     }
 
-    const formData = new FormData();
-    formData.append("type", "text")
-    formData.append("messages", isFile ? fileContent : value)
-    formData.append("stream", "true")
-
     setIsGenerating(true)
-
-    const body = formData
-
+    const body = {
+            messages: isFile ? fileContent : value
+    }
     fetchEventSource(DOC_SUM_URL, {
         method: "POST",
         headers: {
-//             "Content-Type": "application/json",
+            "Content-Type": "application/json",
             "Accept": "*/*"
         },
-        body: body,
+        body: JSON.stringify(body),
         openWhenHidden: true,
         async onopen(response) {
             if (response.ok) {
@@ -75,32 +70,32 @@ const DocSum = () => {
             }
         },
         onmessage(msg) {
-                    if (msg?.data != "[DONE]") {
-                        try {
-                            const res = JSON.parse(msg.data)
-                            const logs = res.ops;
-                            logs.forEach((log: { op: string; path: string; value: string }) => {
-                                if (log.op === "add") {
-                                    if (
-                                        log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
-                                    ) {
-                                       setResponse(log.value);
-                                    }
-                                }
-                            });
-                        } catch (e) {
-                            console.log("something wrong in msg", e);
-                            throw e;
+            if (msg?.data != "[DONE]") {
+                try {
+                    const res = JSON.parse(msg.data)
+                    const logs = res.ops;
+                    logs.forEach((log: { op: string; path: string; value: string }) => {
+                        if (log.op === "add") {
+                            if (
+                                log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
+                            ) {
+                               setResponse(prev=>prev+log.value);
+                            }
                         }
-                    }
-                },
+                    });
+                } catch (e) {
+                    console.log("something wrong in msg", e);
+                    throw e;
+                }
+            }
+        },
         onerror(err) {
             console.log("error", err);
-            setIsGenerating(false)
+            setIsGenerating(false) 
             throw err;
         },
         onclose() {
-           setIsGenerating(false)
+           setIsGenerating(false) 
         },
     });
 }
@@ -148,7 +143,7 @@ const DocSum = () => {
                             <Markdown content={response} />
                         </div>
                     )}
-
+                    
                 </div>
             </div>
         </div >

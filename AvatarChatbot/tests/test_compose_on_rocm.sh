@@ -68,11 +68,11 @@ function start_services() {
     export FACE="assets/img/avatar5.png"
     # export AUDIO='assets/audio/eg3_ref.wav' # audio file path is optional, will use base64str in the post request as input if is 'None'
     export AUDIO='None'
-    export FACESIZE=50
+    export FACESIZE=96
     export OUTFILE="/outputs/result.mp4"
     export GFPGAN_MODEL_VERSION=1.4 # latest version, can roll back to v1.3 if needed
     export UPSCALE_FACTOR=1
-    export FPS=5
+    export FPS=10
 
     # Start Docker Containers
     docker compose up -d

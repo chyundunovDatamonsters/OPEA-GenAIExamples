@@ -75,27 +75,25 @@ const DocSum = () => {
             }
         },
         onmessage(msg) {
-            console.log(msg)
             setResponse("test content");
-            console.log(response)
-//             if (msg?.data != "[DONE]") {
-//                 try {
-//                     const res = JSON.parse(msg.data)
-//                     const logs = res.ops;
-//                     logs.forEach((log: { op: string; path: string; value: string }) => {
-//                         if (log.op === "add") {
-//                             if (
-//                                 log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
-//                             ) {
-//                                setResponse("test content");
-//                             }
-//                         }
-//                     });
-//                 } catch (e) {
-//                     console.log("something wrong in msg", e);
-//                     throw e;
-//                 }
-//             }
+            if (msg?.data != "[DONE]") {
+                try {
+                    const res = JSON.parse(msg.data)
+                    const logs = res.ops;
+                    logs.forEach((log: { op: string; path: string; value: string }) => {
+                        if (log.op === "add") {
+                            if (
+                                log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
+                            ) {
+                               setResponse("test content");
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.log("something wrong in msg", e);
+                    throw e;
+                }
+            }
         },
         onerror(err) {
             console.log("error", err);

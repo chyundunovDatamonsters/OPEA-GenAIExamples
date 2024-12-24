@@ -39,7 +39,7 @@ function start_services() {
     cd $WORKPATH/docker_compose/amd/gpu/rocm
 
     export HUGGINGFACEHUB_API_TOKEN=$HUGGINGFACEHUB_API_TOKEN
-    export host_ip=$(hostname -I | awk '{print $1}')
+    export host_ip=${ip_address}
 
     export TGI_SERVICE_PORT=3006
     export TGI_LLM_ENDPOINT=http://${host_ip}:${TGI_SERVICE_PORT}
@@ -93,7 +93,7 @@ function start_services() {
 function validate_megaservice() {
     cd $WORKPATH
     ls
-    result=$(http_proxy="" curl http://${ip_address}:3009/v1/avatarchatbot -X POST -d @../assets/audio/sample_whoareyou.json -H 'Content-Type: application/json')
+    result=$(http_proxy="" curl http://${ip_address}:3009/v1/avatarchatbot -X POST -d @assets/audio/sample_whoareyou.json -H 'Content-Type: application/json')
     echo "result is === $result"
     if [[ $result == *"mp4"* ]]; then
         echo "Result correct."
@@ -130,7 +130,7 @@ function main() {
     stop_docker
     if [[ "$IMAGE_REPO" == "opea" ]]; then build_docker_images; fi
     start_services
-    sleep 20
+    sleep 10
     # validate_microservices
     validate_megaservice
     # validate_frontend

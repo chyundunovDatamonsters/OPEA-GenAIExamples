@@ -90,7 +90,7 @@ function start_services() {
 
     n=0
     until [[ "$n" -ge 100 ]]; do
-       docker logs wav2lip-service > $LOG_PATH/wav2lip-service_start.log
+       docker logs wav2lip-service >& $LOG_PATH/wav2lip-service_start.log
        if grep -q "Application startup complete" $LOG_PATH/wav2lip-service_start.log; then
            break
        fi

@@ -21,7 +21,7 @@ function build_docker_images() {
         echo "Cloning GenAIComps repository"
         git clone https://github.com/opea-project/GenAIComps.git && cd GenAIComps && git checkout "${opea_branch:-"main"}" && cd ../
     fi
-    service_list="dataprep-redis embedding-tei retriever-redis reranking-tei doc-index-retriever"
+    service_list="dataprep-redis embedding-tei retriever-redis doc-index-retriever"
     docker compose -f build.yaml build ${service_list} --no-cache > ${LOG_PATH}/docker_image_build.log
 
     docker pull ghcr.io/huggingface/text-embeddings-inference:cpu-1.5
@@ -35,21 +35,16 @@ function start_services() {
     echo "Starting Docker Services...."
     cd $WORKPATH/docker_compose/intel/cpu/xeon
     export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
-    export RERANK_MODEL_ID="BAAI/bge-reranker-base"
     export TEI_EMBEDDING_ENDPOINT="http://${ip_address}:6006"
-    export TEI_RERANKING_ENDPOINT="http://${ip_address}:8808"
-    export TGI_LLM_ENDPOINT="http://${ip_address}:8008"
     export REDIS_URL="redis://${ip_address}:6379"
     export INDEX_NAME="rag-redis"
     export HUGGINGFACEHUB_API_TOKEN=${HUGGINGFACEHUB_API_TOKEN}
     export MEGA_SERVICE_HOST_IP=${ip_address}
     export EMBEDDING_SERVICE_HOST_IP=${ip_address}
     export RETRIEVER_SERVICE_HOST_IP=${ip_address}
-    export RERANK_SERVICE_HOST_IP=${ip_address}
-    export LLM_SERVICE_HOST_IP=${ip_address}
 
     # Start Docker Containers
-    docker compose up -d
+    docker compose -f compose_without_rerank.yaml up -d
     sleep 5m
     echo "Docker services started!"
 }
@@ -98,10 +93,6 @@ function validate_megaservice() {
         docker logs embedding-tei-server | tee -a ${LOG_PATH}/doc-index-retriever-service-xeon.log
         echo "=============Retriever container log=================="
         docker logs retriever-redis-server | tee -a ${LOG_PATH}/doc-index-retriever-service-xeon.log
-        echo "=============TEI Reranking log=================="
-        docker logs tei-reranking-server | tee -a ${LOG_PATH}/doc-index-retriever-service-xeon.log
-        echo "=============Reranking container log=================="
-        docker logs reranking-tei-xeon-server | tee -a ${LOG_PATH}/doc-index-retriever-service-xeon.log
         echo "=============Doc-index-retriever container log=================="
         docker logs doc-index-retriever-server | tee -a ${LOG_PATH}/doc-index-retriever-service-xeon.log
         exit 1

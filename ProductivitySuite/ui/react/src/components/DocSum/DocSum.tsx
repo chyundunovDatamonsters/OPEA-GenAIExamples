@@ -79,7 +79,7 @@ const DocSum = () => {
                         try {
                             const res = JSON.parse(msg.data)
                             const logs = res.ops;
-                            logs.forEach((log: { ops: string; path: string; value: string }) => {
+                            logs.forEach((log: { op: string; path: string; value: string }) => {
                                 if (log.op === "add") {
                                     if (
                                         log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length

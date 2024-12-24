@@ -120,14 +120,14 @@ function validate_megaservice() {
 
 
 function stop_docker() {
-    cd $WORKPATH/docker_compose/intel/cpu/xeon
+    cd $WORKPATH/docker_compose/amd/gpu/rocm
     docker compose down
 }
 
 
 function main() {
 
-    stop_docker
+#    stop_docker
 #    if [[ "$IMAGE_REPO" == "opea" ]]; then build_docker_images; fi
     start_services
     sleep 10

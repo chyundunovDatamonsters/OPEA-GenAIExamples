@@ -94,7 +94,7 @@ const DocSum = () => {
                     throw e;
                 }
             }
-            console.log(response)
+
         },
         onerror(err) {
             console.log("error", err);
@@ -107,7 +107,7 @@ const DocSum = () => {
     });
 }
 
-
+    console.log(response)
     return (
         <div className={styleClasses.docSumWrapper}>
             <div className={styleClasses.docSumContent}>

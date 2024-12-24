@@ -121,14 +121,14 @@ function validate_megaservice() {
 
 function stop_docker() {
     cd $WORKPATH/docker_compose/amd/gpu/rocm
-    docker compose down
+    docker compose down && docker compose rm -f
 }
 
 
 function main() {
 
-#    stop_docker
-#    if [[ "$IMAGE_REPO" == "opea" ]]; then build_docker_images; fi
+    stop_docker
+    if [[ "$IMAGE_REPO" == "opea" ]]; then build_docker_images; fi
     start_services
     sleep 10
     # validate_microservices
@@ -136,8 +136,7 @@ function main() {
     # validate_frontend
     stop_docker
 
-    echo y | docker builder prune --all
-    echo y | docker image prune
+    echo y | docker system prune
 
 }
 

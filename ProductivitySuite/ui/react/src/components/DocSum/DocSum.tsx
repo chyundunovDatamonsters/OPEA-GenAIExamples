@@ -86,7 +86,7 @@ const DocSum = () => {
                                 log.path.endsWith("/streamed_output/-") && log.path.length >= "/streamed_output/-".length
                             ) {
                                 console.log(log.value)
-                                respPrepare = JSON.parse(log.value)
+                                const respPrepare = JSON.parse(log.value)
                                 setResponse(prev=>prev+respPrepare.output_text);
                             }
                         }

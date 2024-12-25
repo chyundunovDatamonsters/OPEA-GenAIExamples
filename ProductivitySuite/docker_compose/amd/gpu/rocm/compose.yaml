@@ -33,7 +33,7 @@ services:
     image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.5
     container_name: tei-embedding-server
     ports:
-      - "6006:80"
+      - "${EMBEDDING_SERVER_PORT:-6006}:80"
     volumes:
       - "/var/opea/productivitysuite/data_embedding:/data"
     shm_size: 1g

@@ -22,62 +22,88 @@ function build_docker_images() {
     docker compose -f build.yaml build --no-cache > ${LOG_PATH}/docker_image_build.log
 
     docker pull ghcr.io/huggingface/text-embeddings-inference:cpu-1.5
-    docker pull ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu
+    docker pull ghcr.io/huggingface/text-generation-inference:2.3.1-rocm
     docker images && sleep 1s
 }
 
 function start_services() {
-    cd $WORKPATH/docker_compose/intel/cpu/xeon/
+    cd $WORKPATH/docker_compose/amd/gpu/rocm/
 
+    export host_ip=${ip_address}
+    export host_ip_external=${ip_address}
+    export MONGO_HOST=${host_ip}
+    export MONGO_PORT=27017
+    export DB_NAME="opea"
+    export PROMPT_COLLECTION_NAME="Conversations"
     export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
     export RERANK_MODEL_ID="BAAI/bge-reranker-base"
     export LLM_MODEL_ID="Intel/neural-chat-7b-v3-3"
-    export LLM_MODEL_ID_CODEGEN="Intel/neural-chat-7b-v3-3"
-    export TEI_EMBEDDING_ENDPOINT="http://${ip_address}:6006"
-    export TEI_RERANKING_ENDPOINT="http://${ip_address}:8808"
-    export TGI_LLM_ENDPOINT="http://${ip_address}:9009"
-    export REDIS_URL="redis://${ip_address}:6379"
-    export REDIS_HOST=${ip_address}
+    export LLM_MODEL_ID_CODEGEN="Qwen/Qwen2.5-Coder-7B-Instruct"
+    export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:6006"
+    export TEI_RERANKING_ENDPOINT="http://${host_ip}:8808"
+    export TGI_LLM_ENDPOINT="http://${host_ip}:9009"
+    export REDIS_URL="redis://${host_ip}:6379"
     export INDEX_NAME="rag-redis"
-    export HUGGINGFACEHUB_API_TOKEN=${HUGGINGFACEHUB_API_TOKEN}
-    export MEGA_SERVICE_HOST_IP=${ip_address}
-    export EMBEDDING_SERVICE_HOST_IP=${ip_address}
-    export RETRIEVER_SERVICE_HOST_IP=${ip_address}
-    export RERANK_SERVICE_HOST_IP=${ip_address}
-    export LLM_SERVICE_HOST_IP=${ip_address}
-    export LLM_SERVICE_HOST_IP_DOCSUM=${ip_address}
-    export LLM_SERVICE_HOST_IP_FAQGEN=${ip_address}
-    export LLM_SERVICE_HOST_IP_CODEGEN=${ip_address}
-    export LLM_SERVICE_HOST_IP_CHATQNA=${ip_address}
-    export TGI_LLM_ENDPOINT_CHATQNA="http://${ip_address}:9009"
-    export TGI_LLM_ENDPOINT_CODEGEN="http://${ip_address}:8028"
-    export TGI_LLM_ENDPOINT_FAQGEN="http://${ip_address}:9009"
-    export TGI_LLM_ENDPOINT_DOCSUM="http://${ip_address}:9009"
-    export BACKEND_SERVICE_ENDPOINT_CHATQNA="http://${ip_address}:8888/v1/chatqna"
-    export BACKEND_SERVICE_ENDPOINT_FAQGEN="http://${ip_address}:8889/v1/faqgen"
-    export DATAPREP_DELETE_FILE_ENDPOINT="http://${ip_address}:6009/v1/dataprep/delete_file"
-    export BACKEND_SERVICE_ENDPOINT_CODEGEN="http://${ip_address}:7778/v1/codegen"
-    export BACKEND_SERVICE_ENDPOINT_DOCSUM="http://${ip_address}:8890/v1/docsum"
-    export DATAPREP_SERVICE_ENDPOINT="http://${ip_address}:6007/v1/dataprep"
-    export DATAPREP_GET_FILE_ENDPOINT="http://${ip_address}:6008/v1/dataprep/get_file"
-    export CHAT_HISTORY_CREATE_ENDPOINT="http://${ip_address}:6012/v1/chathistory/create"
-    export CHAT_HISTORY_CREATE_ENDPOINT="http://${ip_address}:6012/v1/chathistory/create"
-    export CHAT_HISTORY_DELETE_ENDPOINT="http://${ip_address}:6012/v1/chathistory/delete"
-    export CHAT_HISTORY_GET_ENDPOINT="http://${ip_address}:6012/v1/chathistory/get"
-    export PROMPT_SERVICE_GET_ENDPOINT="http://${ip_address}:6018/v1/prompt/get"
-    export PROMPT_SERVICE_CREATE_ENDPOINT="http://${ip_address}:6018/v1/prompt/create"
-    export KEYCLOAK_SERVICE_ENDPOINT="http://${ip_address}:8080"
-    export MONGO_HOST=${ip_address}
-    export MONGO_PORT=27017
-    export DB_NAME="opea"
-    export COLLECTION_NAME="Conversations"
+    export HUGGINGFACEHUB_API_TOKEN="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"
+    export LANGCHAIN_API_KEY='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'
+    export LANGCHAIN_TRACING_V2=true
+    export LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
+    export MEGA_SERVICE_HOST_IP=${host_ip}
+    export EMBEDDING_SERVICE_HOST_IP=${host_ip}
+    export EMBEDDING_SERVER_PORT=6006
+    export RETRIEVER_SERVICE_HOST_IP=${host_ip}
+    export RETRIEVER_SERVICE_PORT=7000
+    export RERANK_SERVICE_HOST_IP=${host_ip}
+    export RERANK_SERVER_PORT=8808
+    export LLM_SERVICE_HOST_IP=${host_ip}
+    export LLM_SERVICE_HOST_IP_DOCSUM=${host_ip}
+    export LLM_SERVICE_HOST_IP_FAQGEN=${host_ip}
+    export LLM_SERVICE_HOST_IP_CODEGEN=${host_ip}
+    export LLM_SERVICE_HOST_IP_CHATQNA=${host_ip}
+    export LLM_SERVICE_PORT_CHATQNA=9009
     export LLM_SERVICE_HOST_PORT_FAQGEN=9002
     export LLM_SERVICE_HOST_PORT_CODEGEN=9001
     export LLM_SERVICE_HOST_PORT_DOCSUM=9003
-    export RERANK_SERVER_PORT=8808
-    export EMBEDDING_SERVER_PORT=6006
-    export LLM_SERVER_PORT=9009
+    export TGI_LLM_ENDPOINT_CHATQNA="http://${host_ip}:9009"
+    export TGI_LLM_ENDPOINT_CODEGEN="http://${host_ip}:8028"
+    export TGI_LLM_ENDPOINT_FAQGEN="http://${host_ip}:9009"
+    export TGI_LLM_ENDPOINT_DOCSUM="http://${host_ip}:9009"
+
+    export BACKEND_SERVICE_ENDPOINT_CHATQNA_PORT=18120
+    export BACKEND_SERVICE_ENDPOINT_FAQGEN_PORT=18122
+    export BACKEND_SERVICE_ENDPOINT_CODEGEN_PORT=18123
+    export BACKEND_SERVICE_ENDPOINT_DOCSUM_PORT=18121
+    export DATAPREP_SERVICE_ENDPOINT_PORT=18125
+    export CHAT_HISTORY_ENDPOINT_PORT=18126
+    export PROMPT_SERVICE_ENDPOINT_PORT=18127
+    export PRODUCTIVITYSUITE_KEYCLOAK_PORT=18129
+    export PRODUCTIVITYSUITE_UI_PORT=18130
+
+    export BACKEND_SERVICE_ENDPOINT_CHATQNA="http://${host_ip_external}:${BACKEND_SERVICE_ENDPOINT_CHATQNA_PORT}/v1/chatqna"
+    export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip_external}:${DATAPREP_SERVICE_ENDPOINT_PORT}/v1/dataprep/delete_file"
+    export BACKEND_SERVICE_ENDPOINT_FAQGEN="http://${host_ip_external}:${BACKEND_SERVICE_ENDPOINT_FAQGEN_PORT}/v1/faqgen"
+    export BACKEND_SERVICE_ENDPOINT_CODEGEN="http://${host_ip_external}:${BACKEND_SERVICE_ENDPOINT_CODEGEN_PORT}/v1/codegen"
+    export BACKEND_SERVICE_ENDPOINT_DOCSUM="http://${host_ip_external}:${BACKEND_SERVICE_ENDPOINT_DOCSUM_PORT}/v1/docsum"
+    export DATAPREP_SERVICE_ENDPOINT="http://${host_ip_external}:${DATAPREP_SERVICE_ENDPOINT_PORT}/v1/dataprep"
+    export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip_external}:${DATAPREP_SERVICE_ENDPOINT_PORT}/v1/dataprep/get_file"
+    export CHAT_HISTORY_CREATE_ENDPOINT="http://${host_ip_external}:${CHAT_HISTORY_ENDPOINT_PORT}/v1/chathistory/create"
+    export CHAT_HISTORY_CREATE_ENDPOINT="http://${host_ip_external}:${CHAT_HISTORY_ENDPOINT_PORT}/v1/chathistory/create"
+    export CHAT_HISTORY_DELETE_ENDPOINT="http://${host_ip_external}:${CHAT_HISTORY_ENDPOINT_PORT}/v1/chathistory/delete"
+    export CHAT_HISTORY_GET_ENDPOINT="http://${host_ip_external}:${CHAT_HISTORY_ENDPOINT_PORT}/v1/chathistory/get"
+    export PROMPT_SERVICE_GET_ENDPOINT="http://${host_ip_external}:${PROMPT_SERVICE_ENDPOINT_PORT}/v1/prompt/get"
+    export PROMPT_SERVICE_CREATE_ENDPOINT="http://${host_ip_external}:${PROMPT_SERVICE_ENDPOINT_PORT}/v1/prompt/create"
+    export KEYCLOAK_SERVICE_ENDPOINT="http://${host_ip_external}:${PRODUCTIVITYSUITE_KEYCLOAK_PORT}"
+
     export PROMPT_COLLECTION_NAME="prompt"
+
+    export V2A_SERVICE_HOST_IP=${host_ip}
+    export V2A_ENDPOINT=http://${host_ip}:7078
+    export A2T_ENDPOINT=http://${host_ip}:7066
+    export A2T_SERVICE_HOST_IP=${host_ip}
+    export A2T_SERVICE_PORT=9099
+    export DATA_ENDPOINT=http://${host_ip}:7079
+    export DATA_SERVICE_HOST_IP=${host_ip}
+    export DATA_SERVICE_PORT=7079
 
     # Start Docker Containers
     docker compose up -d > ${LOG_PATH}/start_services_with_compose.log
@@ -119,7 +145,7 @@ function validate_service() {
         HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -H 'Content-Type: application/json' "$URL")
     elif [[ $SERVICE_NAME == *"dataprep_del"* ]]; then
         HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -d '{"file_path": "all"}' -H 'Content-Type: application/json' "$URL")
-    elif [[ $SERVICE_NAME == *"docsum-xeon-backend-server"* ]]; then
+    elif [[ $SERVICE_NAME == *"docsum-backend-server"* ]]; then
 	local INPUT_DATA="messages=Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."
         HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -F "$INPUT_DATA" -H 'Content-Type: multipart/form-data' "$URL")
     else
@@ -153,7 +179,7 @@ function validate_microservices() {
 
     # tei for embedding service
     validate_service \
-        "${ip_address}:6006/embed" \
+        "${host_ip}:${EMBEDDING_SERVER_PORT}/embed" \
         "[[" \
         "tei-embedding" \
         "tei-embedding-server" \
@@ -161,7 +187,7 @@ function validate_microservices() {
 
     # embedding microservice
     validate_service \
-        "${ip_address}:6000/v1/embeddings" \
+        "${host_ip}:6000/v1/embeddings" \
         '"text":"What is Deep Learning?","embedding":[' \
         "embedding-microservice" \
         "embedding-tei-server" \
@@ -172,28 +198,28 @@ function validate_microservices() {
     # test /v1/dataprep upload file
     echo "Deep learning is a subset of machine learning that utilizes neural networks with multiple layers to analyze various levels of abstract data representations. It enables computers to identify patterns and make decisions with minimal human intervention by learning from large amounts of data." > $LOG_PATH/dataprep_file.txt
     validate_service \
-        "http://${ip_address}:6007/v1/dataprep" \
+        "http://${host_ip}:${DATAPREP_SERVICE_ENDPOINT_PORT}/v1/dataprep" \
         "Data preparation succeeded" \
         "dataprep_upload_file" \
         "dataprep-redis-server"
 
     # test /v1/dataprep upload link
     validate_service \
-        "http://${ip_address}:6007/v1/dataprep" \
+        "http://${host_ip}:${DATAPREP_SERVICE_ENDPOINT_PORT}/v1/dataprep" \
         "Data preparation succeeded" \
         "dataprep_upload_link" \
         "dataprep-redis-server"
 
     # test /v1/dataprep/get_file
     validate_service \
-        "http://${ip_address}:6007/v1/dataprep/get_file" \
+        "http://${host_ip}:${DATAPREP_SERVICE_ENDPOINT_PORT}/v1/dataprep/get_file" \
         '{"name":' \
         "dataprep_get" \
         "dataprep-redis-server"
 
     # test /v1/dataprep/delete_file
     validate_service \
-        "http://${ip_address}:6007/v1/dataprep/delete_file" \
+        "http://${host_ip}:${DATAPREP_SERVICE_ENDPOINT_PORT}/v1/dataprep/delete_file" \
         '{"status":true}' \
         "dataprep_del" \
         "dataprep-redis-server"
@@ -201,7 +227,7 @@ function validate_microservices() {
     # retrieval microservice
     test_embedding=$(python3 -c "import random; embedding = [random.uniform(-1, 1) for _ in range(768)]; print(embedding)")
     validate_service \
-        "${ip_address}:7000/v1/retrieval" \
+        "${host_ip}:7000/v1/retrieval" \
         "retrieved_docs" \
         "retrieval-microservice" \
         "retriever-redis-server" \
@@ -209,7 +235,7 @@ function validate_microservices() {
 
     # tei for rerank microservice
     validate_service \
-        "${ip_address}:8808/rerank" \
+        "${host_ip}:${RERANK_SERVER_PORT}/rerank" \
         '{"index":1,"score":' \
         "tei-rerank" \
         "tei-reranking-server" \
@@ -217,7 +243,7 @@ function validate_microservices() {
 
     # rerank microservice
     validate_service \
-        "${ip_address}:8000/v1/reranking" \
+        "${host_ip}:8000/v1/reranking" \
         "Deep learning is..." \
         "rerank-microservice" \
         "reranking-tei-xeon-server" \
@@ -225,7 +251,7 @@ function validate_microservices() {
 
     # tgi for llm service
     validate_service \
-        "${ip_address}:9009/generate" \
+        "${host_ip}:${LLM_SERVICE_PORT_CHATQNA}/generate" \
         "generated_text" \
         "tgi-llm" \
         "tgi-service" \
@@ -233,7 +259,7 @@ function validate_microservices() {
 
     # ChatQnA llm microservice
     validate_service \
-        "${ip_address}:9000/v1/chat/completions" \
+        "${host_ip}:9000/v1/chat/completions" \
         "data: " \
         "llm-microservice" \
         "llm-tgi-server" \
@@ -241,7 +267,7 @@ function validate_microservices() {
 
     # FAQGen llm microservice
     validate_service \
-        "${ip_address}:9002/v1/faqgen" \
+        "${host_ip}:9002/v1/faqgen" \
         "data: " \
         "llm_faqgen" \
         "llm-faqgen-server" \
@@ -249,7 +275,7 @@ function validate_microservices() {
 
     # Docsum llm microservice
     validate_service \
-        "${ip_address}:9003/v1/chat/docsum" \
+        "${host_ip}:9003/v1/chat/docsum" \
         "data: " \
         "llm_docsum" \
         "llm-docsum-server" \
@@ -257,14 +283,14 @@ function validate_microservices() {
 
     # CodeGen llm microservice
     validate_service \
-        "${ip_address}:9001/v1/chat/completions" \
+        "${host_ip}:9001/v1/chat/completions" \
         "data: " \
         "llm_codegen" \
         "llm-tgi-server-codegen" \
         '{"query":"def print_hello_world():"}'
 
     result=$(curl -X 'POST' \
-    http://${ip_address}:6012/v1/chathistory/create \
+    http://${host_ip}:${CHAT_HISTORY_ENDPOINT_PORT}/v1/chathistory/create \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
     -d '{
@@ -281,7 +307,7 @@ function validate_microservices() {
         fi
 
         result=$(curl -X 'POST' \
-    http://$ip_address:6018/v1/prompt/create \
+    http://${host_ip}:${PROMPT_SERVICE_ENDPOINT_PORT}/v1/prompt/create \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
     -d '{
@@ -303,7 +329,7 @@ function validate_megaservice() {
 
     # Curl the ChatQnAMega Service
     validate_service \
-        "${ip_address}:8888/v1/chatqna" \
+        "${host_ip}:${BACKEND_SERVICE_ENDPOINT_CHATQNA_PORT}/v1/chatqna" \
         "data: " \
         "chatqna-megaservice" \
         "chatqna-xeon-backend-server" \
@@ -312,7 +338,7 @@ function validate_megaservice() {
 
     # Curl the FAQGen Service
     validate_service \
-        "${ip_address}:8889/v1/faqgen" \
+        "${host_ip}:${BACKEND_SERVICE_ENDPOINT_FAQGEN_PORT}/v1/faqgen" \
         "Text Embeddings Inference" \
         "faqgen-xeon-backend-server" \
         "faqgen-xeon-backend-server" \
@@ -320,7 +346,7 @@ function validate_megaservice() {
 
     # Curl the DocSum Mega Service
     validate_service \
-        "${ip_address}:8890/v1/docsum" \
+        "${host_ip}:${BACKEND_SERVICE_ENDPOINT_DOCSUM_PORT}/v1/docsum" \
         "embedding" \
         "docsum-xeon-backend-server" \
         "docsum-xeon-backend-server" \
@@ -329,7 +355,7 @@ function validate_megaservice() {
 
     # Curl the CodeGen Mega Service
     validate_service \
-    "${ip_address}:7778/v1/codegen" \
+    "${host_ip}:${BACKEND_SERVICE_ENDPOINT_CODEGEN_PORT}/v1/codegen" \
         "print" \
         "codegen-xeon-backend-server" \
         "codegen-xeon-backend-server" \
@@ -340,7 +366,7 @@ function validate_frontend() {
     echo "[ TEST INFO ]: --------- frontend test started ---------"
     cd $WORKPATH/ui/react
     local conda_env_name="OPEA_e2e"
-    export PATH=${HOME}/miniforge3/bin/:$PATH
+    export PATH=${HOME}/miniconda3/bin/:$PATH
 #    conda remove -n ${conda_env_name} --all -y
 #    conda create -n ${conda_env_name} python=3.12 -y
     source activate ${conda_env_name}
@@ -362,7 +388,7 @@ function validate_frontend() {
 }
 
 function stop_docker() {
-    cd $WORKPATH/docker_compose/intel/cpu/xeon/
+    cd $WORKPATH/docker_compose/amd/gpu/rocm/
     docker compose stop && docker compose rm -f
 }
 

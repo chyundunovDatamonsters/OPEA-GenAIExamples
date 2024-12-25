@@ -83,7 +83,7 @@ const DocSum = () => {
                         if (log.op === "add") {
                             console.log(log.path)
                             if (
-                                log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
+                                log.path.endsWith("/streamed_output/-") && log.path.length >= "/streamed_output/-".length
                             ) {
                                 console.log(log.value)
                                 setResponse(prev=>prev+log.value);

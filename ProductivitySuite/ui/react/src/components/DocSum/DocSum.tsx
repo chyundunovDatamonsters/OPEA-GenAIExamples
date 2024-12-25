@@ -46,17 +46,22 @@ const DocSum = () => {
         return 
     }
 
+    const formData = new FormData();
+    formData.append("type", "text")
+    formData.append("messages", isFile ? fileContent : value)
+    formData.append("stream", "true")
+
     setIsGenerating(true)
-    const body = {
-            messages: isFile ? fileContent : value
-    }
+
+    const body = formData
+
     fetchEventSource(DOC_SUM_URL, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+//             "Content-Type": "application/json",
             "Accept": "*/*"
         },
-        body: JSON.stringify(body),
+        body: body,
         openWhenHidden: true,
         async onopen(response) {
             if (response.ok) {
@@ -74,12 +79,12 @@ const DocSum = () => {
                 try {
                     const res = JSON.parse(msg.data)
                     const logs = res.ops;
-                    logs.forEach((log: { op: string; path: string; value: string }) => {
+                    logs.forEach((log: { op: string; path: string; value: { output_text: string } }) => {
                         if (log.op === "add") {
                             if (
-                                log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
+                                log.path.endsWith("/streamed_output/-") && log.path.length >= "/streamed_output/-".length
                             ) {
-                               setResponse(prev=>prev+log.value);
+                                setResponse(prev=>prev+log.value.output_text);
                             }
                         }
                     });
@@ -88,6 +93,7 @@ const DocSum = () => {
                     throw e;
                 }
             }
+
         },
         onerror(err) {
             console.log("error", err);
@@ -100,7 +106,7 @@ const DocSum = () => {
     });
 }
 
-
+//     console.log("test___", response)
     return (
         <div className={styleClasses.docSumWrapper}>
             <div className={styleClasses.docSumContent}>

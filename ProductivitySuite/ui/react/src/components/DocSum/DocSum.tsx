@@ -82,7 +82,7 @@ const DocSum = () => {
                     logs.forEach((log: { op: string; path: string; value: string }) => {
                         if (log.op === "add") {
                             if (
-                                log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
+                                log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
                             ) {
                                 console.log(log.value)
                                 setResponse(prev=>prev+log.value);

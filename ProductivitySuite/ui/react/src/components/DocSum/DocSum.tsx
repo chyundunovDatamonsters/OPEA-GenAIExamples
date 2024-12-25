@@ -75,19 +75,17 @@ const DocSum = () => {
             }
         },
         onmessage(msg) {
-//             console.log(msg)
             if (msg?.data != "[DONE]") {
                 try {
                     const res = JSON.parse(msg.data)
                     const logs = res.ops;
                     logs.forEach((log: { op: string; path: string; value: string }) => {
-//                         console.log(log.value)
                         if (log.op === "add") {
                             if (
                                 log.value !== "</s>" && log.path.endsWith("/streamed_output/-") && log.path.length > "/streamed_output/-".length
-                                console.log(log.value)
                             ) {
-                               setResponse(prev=>prev+log.value);
+                                console.log(log.value)
+                                setResponse(prev=>prev+log.value);
                             }
                         }
                     });

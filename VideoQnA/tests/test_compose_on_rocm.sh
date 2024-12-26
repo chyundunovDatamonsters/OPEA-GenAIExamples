@@ -76,6 +76,15 @@ function start_services() {
     docker compose up -d > ${LOG_PATH}/start_services_with_compose.log
     sleep 1m
 
+    until [[ "$n" -ge 100 ]]; do
+        docker logs tgi-llava-rocm-server > "${LOG_PATH}"/tgi-llava-rocm-server_start.log
+        if grep -q Connected "${LOG_PATH}"/tgi-llava-rocm-server_start.log; then
+            break
+        fi
+        sleep 5s
+        n=$((n+1))
+    done
+
     # List of containers running uvicorn
     list=("dataprep-vdms-server" "embedding-multimodal-server" "retriever-vdms-server" "reranking-videoqna-server" "lvm-video-llama" "videoqna-backend-server")
 

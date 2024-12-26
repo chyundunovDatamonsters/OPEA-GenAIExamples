@@ -345,7 +345,7 @@ function validate_megaservice() {
         "Text Embeddings Inference" \
         "faqgen-backend-server" \
         "faqgen-backend-server" \
-        '{"messages": "Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'\
+        '{"messages=Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'\
 
     # Curl the DocSum Mega Service
     validate_service \
@@ -353,7 +353,7 @@ function validate_megaservice() {
         "embedding" \
         "docsum-backend-server" \
         "docsum-backend-server" \
-        '{"messages": "Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'
+        '{"messages=Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'
 
 
     # Curl the CodeGen Mega Service

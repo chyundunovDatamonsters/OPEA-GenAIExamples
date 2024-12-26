@@ -150,6 +150,7 @@ function validate_service() {
             HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -F "type=text" -F "$INPUT_DATA" -H 'Content-Type: multipart/form-data' "$URL")
     elif [[ $SERVICE_NAME == *"faqgen-backend-server"* ]]; then
     	  local INPUT_DATA="messages=Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."
+            curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -F "$INPUT_DATA" -F "stream=true" -H 'Content-Type: multipart/form-data' "$URL")
             HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -F "$INPUT_DATA" -F "stream=true" -H 'Content-Type: multipart/form-data' "$URL")
     else
         HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -d "$INPUT_DATA" -H 'Content-Type: application/json' "$URL")

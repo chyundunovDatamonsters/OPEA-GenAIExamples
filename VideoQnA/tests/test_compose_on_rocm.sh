@@ -76,7 +76,7 @@ function start_services() {
     docker compose up -d > ${LOG_PATH}/start_services_with_compose.log
     sleep 1m
 
-    until [[ "$n" -ge 100 ]]; do
+    until [[ "$n" -ge 500 ]]; do
         docker logs tgi-llava-rocm-server > "${LOG_PATH}"/tgi-llava-rocm-server_start.log
         if grep -q Connected "${LOG_PATH}"/tgi-llava-rocm-server_start.log; then
             break

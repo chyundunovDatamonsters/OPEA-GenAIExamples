@@ -93,7 +93,6 @@ services:
     devices:
       - /dev/kfd:/dev/kfd
       - /dev/dri:/dev/dri
-#      - /dev/dri/:/dev/dri/
     cap_add:
       - SYS_PTRACE
     group_add:

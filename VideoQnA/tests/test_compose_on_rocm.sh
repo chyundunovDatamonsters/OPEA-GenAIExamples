@@ -41,8 +41,8 @@ function start_services() {
     export VIDEOQNA_TGI_SERVICE_PORT="9009"
     export HOST_IP=${host_ip}
     export VIDEOQNA_HUGGINGFACEHUB_API_TOKEN=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
-    #export VIDEOQNA_LVM_MODEL_ID="Xkev/Llama-3.2V-11B-cot"
-    export VIDEOQNA_LVM_MODEL_ID="BAAI/Aquila-VL-2B-llava-qwen"
+    export VIDEOQNA_LVM_MODEL_ID="Xkev/Llama-3.2V-11B-cot"
+#    export VIDEOQNA_LVM_MODEL_ID="BAAI/Aquila-VL-2B-llava-qwen"
 
     export LVM_ENDPOINT="http://${host_ip}:9009"
     export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/videoqna"

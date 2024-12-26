@@ -63,7 +63,7 @@ function start_services() {
     # Insert some sample data to the DB
     HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://${host_ip}:6007/v1/dataprep \
     -H "Content-Type: multipart/form-data" \
-    -F "files=@$WORKPATH/data/op_1_0320241830.mp4")
+    -F "files=@$WORKPATH/assets/video/op_1_0320241830.mp4")
 
     if [ "$HTTP_STATUS" -eq 200 ]; then
         echo "Inserted some data at the beginning."

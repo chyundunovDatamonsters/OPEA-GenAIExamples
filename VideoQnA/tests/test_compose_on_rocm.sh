@@ -77,7 +77,7 @@ function start_services() {
     sleep 1m
 
     # List of containers running uvicorn
-    list=("dataprep-vdms-server" "embedding-multimodal-server" "retriever-vdms-server" "reranking-videoqna-server" "video-llama-lvm-server" "lvm-video-llama" "videoqna-backend-server")
+    list=("dataprep-vdms-server" "embedding-multimodal-server" "retriever-vdms-server" "reranking-videoqna-server" "lvm-video-llama" "videoqna-backend-server")
 
     # Define the maximum time limit in seconds
     TIME_LIMIT=5400

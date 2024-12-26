@@ -253,15 +253,15 @@ function validate_microservices() {
     validate_service \
         "${host_ip}:${LLM_SERVICE_PORT_CHATQNA}/generate" \
         "generated_text" \
-        "tgi-llm" \
-        "tgi-service" \
+        "tgi_service" \
+        "tgi_service" \
         '{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":17, "do_sample": true}}'
 
     # ChatQnA llm microservice
     validate_service \
         "${host_ip}:9000/v1/chat/completions" \
         "data: " \
-        "llm-microservice" \
+        "llm" \
         "llm-tgi-server" \
         '{"query":"What is Deep Learning?"}'
 
@@ -277,7 +277,7 @@ function validate_microservices() {
     validate_service \
         "${host_ip}:9003/v1/chat/docsum" \
         "data: " \
-        "llm_docsum" \
+        "llm_docsum_server" \
         "llm-docsum-server" \
         '{"query":"Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'
 

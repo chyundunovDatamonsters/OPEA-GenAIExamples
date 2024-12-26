@@ -193,7 +193,7 @@ function validate_microservices() {
         "embedding-tei-server" \
         '{"text":"What is Deep Learning?"}'
 
-    sleep 1m # retrieval can't curl as expected, try to wait for more time
+#    sleep 1m # retrieval can't curl as expected, try to wait for more time
 
     # test /v1/dataprep upload file
     echo "Deep learning is a subset of machine learning that utilizes neural networks with multiple layers to analyze various levels of abstract data representations. It enables computers to identify patterns and make decisions with minimal human intervention by learning from large amounts of data." > $LOG_PATH/dataprep_file.txt
@@ -331,8 +331,8 @@ function validate_megaservice() {
     validate_service \
         "${host_ip}:${BACKEND_SERVICE_ENDPOINT_CHATQNA_PORT}/v1/chatqna" \
         "data: " \
-        "chatqna-megaservice" \
-        "chatqna-xeon-backend-server" \
+        "chatqna-backend-server" \
+        "chatqna-backend-server" \
         '{"messages": "What is the revenue of Nike in 2023?"}'\
 
 
@@ -340,16 +340,16 @@ function validate_megaservice() {
     validate_service \
         "${host_ip}:${BACKEND_SERVICE_ENDPOINT_FAQGEN_PORT}/v1/faqgen" \
         "Text Embeddings Inference" \
-        "faqgen-xeon-backend-server" \
-        "faqgen-xeon-backend-server" \
+        "faqgen-backend-server" \
+        "faqgen-backend-server" \
         '{"messages": "Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'\
 
     # Curl the DocSum Mega Service
     validate_service \
         "${host_ip}:${BACKEND_SERVICE_ENDPOINT_DOCSUM_PORT}/v1/docsum" \
         "embedding" \
-        "docsum-xeon-backend-server" \
-        "docsum-xeon-backend-server" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
         '{"messages": "Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'
 
 
@@ -357,8 +357,8 @@ function validate_megaservice() {
     validate_service \
     "${host_ip}:${BACKEND_SERVICE_ENDPOINT_CODEGEN_PORT}/v1/codegen" \
         "print" \
-        "codegen-xeon-backend-server" \
-        "codegen-xeon-backend-server" \
+        "codegen-backend-server" \
+        "codegen-backend-server" \
         '{"messages": "def print_hello_world():"}'
 }
 

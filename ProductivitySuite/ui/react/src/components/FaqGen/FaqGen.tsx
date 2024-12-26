@@ -57,17 +57,22 @@ const FaqGen = () => {
         return 
     }
 
+
+    const formData = new FormData();
+    formData.append("messages", isFile ? fileContent : value)
+
     setIsGenerating(true)
-    const body = {
-            messages: isFile ? fileContent : value
-    }
+        const body = formData
+
+//     console.log(isFile ? fileContent : value);
+
     fetchEventSource(FAQ_GEN_URL, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+//             "Content-Type": "multipart/form-data",
             "Accept": "*/*"
         },
-        body: JSON.stringify(body),
+        body: body,
         openWhenHidden: true,
         async onopen(response) {
             if (response.ok) {

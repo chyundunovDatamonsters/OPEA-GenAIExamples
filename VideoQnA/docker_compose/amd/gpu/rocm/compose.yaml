@@ -92,8 +92,7 @@ services:
     shm_size: 64g
     devices:
       - /dev/kfd:/dev/kfd
-      - /dev/dri/card40:/dev/dri/card40
-      - /dev/dri/renderD168:/dev/dri/renderD168
+      - /dev/dri:/dev/dri
 #      - /dev/dri/:/dev/dri/
     cap_add:
       - SYS_PTRACE

@@ -174,7 +174,7 @@ function validate_service() {
         echo "[ $SERVICE_NAME ] Content is as expected."
     fi
 
-    sleep 1s
+    sleep 5s
 }
 
 function validate_microservices() {

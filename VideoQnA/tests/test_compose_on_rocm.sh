@@ -227,8 +227,8 @@ function validate_megaservice() {
     validate_services \
     "${host_ip}:8888/v1/videoqna" \
     "man" \
-    "videoqna-xeon-backend-server" \
-    "videoqna-xeon-backend-server" \
+    "videoqna-backend-server" \
+    "videoqna-backend-server" \
     '{"messages":"What is the man doing?","stream":"True"}'
 }
 
@@ -253,7 +253,7 @@ function validate_frontend() {
 }
 
 function stop_docker() {
-    cd $WORKPATH/docker_compose/intel/cpu/xeon/
+    cd $WORKPATH/docker_compose/amd/gpu/rocm/
     docker compose stop && docker compose rm -f
     docker volume rm video-llama-model
 }

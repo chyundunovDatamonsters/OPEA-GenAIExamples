@@ -47,9 +47,9 @@ function start_services() {
     export LVM_ENDPOINT="http://${host_ip}:9009"
     export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/videoqna"
     export BACKEND_HEALTH_CHECK_ENDPOINT="http://${host_ip}:8888/v1/health_check"
-    export DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:6004/v1/dataprep"
-    export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6004/v1/dataprep/get_file"
-    export DATAPREP_GET_VIDEO_LIST_ENDPOINT="http://${host_ip}:6004/v1/dataprep/get_videos"
+    export DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:6007/v1/dataprep"
+    export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
+    export DATAPREP_GET_VIDEO_LIST_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_videos"
 
     export VDMS_HOST=${host_ip}
     export VDMS_PORT=8001

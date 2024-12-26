@@ -30,7 +30,7 @@ function build_docker_images() {
 function start_services() {
     cd $WORKPATH/docker_compose/amd/gpu/rocm/
 
-    export host_ip=$(ip_address)
+    export host_ip=${ip_address}
 
     export MEGA_SERVICE_HOST_IP=${host_ip}
     export EMBEDDING_SERVICE_HOST_IP=${host_ip}

@@ -152,7 +152,7 @@ function validate_service() {
     	  local INPUT_DATA="messages=Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."
             HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -F "$INPUT_DATA" -F "stream=true" -H 'Content-Type: multipart/form-data' "$URL")
     else
-        HTTP_RESPONSE_TEST=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -d "Test data" -H 'Content-Type: application/json' "$URL")
+#        HTTP_RESPONSE_TEST=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -d "Test data" -H 'Content-Type: application/json' "$URL")
         HTTP_RESPONSE=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" -X POST -d "$INPUT_DATA" -H 'Content-Type: application/json' "$URL")
     fi
     HTTP_STATUS=$(echo $HTTP_RESPONSE | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
@@ -398,14 +398,14 @@ function stop_docker() {
 
 function main() {
 
-    stop_docker
+#    stop_docker
 #    if [[ "$IMAGE_REPO" == "opea" ]]; then build_docker_images; fi
     start_time=$(date +%s)
     start_services
     end_time=$(date +%s)
     duration=$((end_time-start_time))
     echo "Mega service start duration is $duration s" && sleep 1s
-    sleep 30
+#    sleep 30
     validate_microservices
     echo "==== microservices validated ===="
     validate_megaservice
@@ -413,7 +413,7 @@ function main() {
     validate_frontend
     echo "==== frontend validated ===="
 
-    stop_docker
+#    stop_docker
 #    echo y | docker system prune
 
 }

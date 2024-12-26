@@ -88,7 +88,7 @@ services:
       HUGGINGFACEHUB_API_TOKEN: ${VIDEOQNA_HUGGINGFACEHUB_API_TOKEN}
       HUGGING_FACE_HUB_TOKEN: ${VIDEOQNA_HUGGINGFACEHUB_API_TOKEN}
     volumes:
-      - "/var/opea/videoqna-service/data:/data"
+      - "./data:/data"
     shm_size: 64g
     devices:
       - /dev/kfd:/dev/kfd

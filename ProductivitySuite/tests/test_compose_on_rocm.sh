@@ -404,7 +404,7 @@ function main() {
     end_time=$(date +%s)
     duration=$((end_time-start_time))
     echo "Mega service start duration is $duration s" && sleep 1s
-
+    sleep 30
     validate_microservices
     echo "==== microservices validated ===="
     validate_megaservice

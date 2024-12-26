@@ -165,7 +165,7 @@ function validate_services() {
 
 function validate_microservices() {
     # Check if the microservices are running correctly.
-    cd $WORKPATH/docker_compose/intel/cpu/xeon//data
+    cd $WORKPATH/docker_compose/amd/gpu/rocm/data
 
     # dataprep microservice
     HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://${host_ip}:6007/v1/dataprep \

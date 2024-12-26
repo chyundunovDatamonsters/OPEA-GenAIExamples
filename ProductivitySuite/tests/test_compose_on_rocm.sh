@@ -245,8 +245,8 @@ function validate_microservices() {
     validate_service \
         "${host_ip}:8000/v1/reranking" \
         "Deep learning is..." \
-        "rerank-microservice" \
-        "reranking-tei-xeon-server" \
+        "reranking" \
+        "reranking-tei-server" \
         '{"initial_query":"What is Deep Learning?", "retrieved_docs": [{"text":"Deep Learning is not..."}, {"text":"Deep learning is..."}]}'
 
     # tgi for llm service

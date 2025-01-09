@@ -6,7 +6,7 @@ services:
     image: ${REGISTRY:-opea}/llm-vllm-rocm:${TAG:-latest}
     container_name: codegen-vllm-service
     ports:
-      - "${CODEGEN_VLLM_SERVICE_PORT:-8081}:8011"
+      - "${CODEGEN_LLM_SERVICE_PORT:-8081}:8011"
     environment:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}

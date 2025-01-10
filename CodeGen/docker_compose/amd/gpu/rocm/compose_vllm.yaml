@@ -48,6 +48,7 @@ services:
       MEGA_SERVICE_HOST_IP: ${CODEGEN_MEGA_SERVICE_HOST_IP}
       LLM_SERVICE_HOST_IP: ${CODEGEN_LLM_SERVICE_HOST}
       LLM_SERVER_PORT: ${CODEGEN_VLLM_SERVICE_PORT:-80}
+      LLM_MODEL: ${CODEGEN_LLM_MODEL_ID}
     ipc: host
     restart: always
   codegen-ui-server:

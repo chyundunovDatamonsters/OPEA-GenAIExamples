@@ -155,11 +155,12 @@ class CodeGenService:
     def __init__(self, host="0.0.0.0", port=8000):
         self.host = host
         self.port = port
-        self.megaservice = ServiceOrchestrator()
-        self.endpoint = str(MegaServiceEndpoint.CODE_GEN)
         ServiceOrchestrator.align_inputs = align_inputs
         ServiceOrchestrator.align_outputs = align_outputs
         ServiceOrchestrator.align_generator = align_generator
+        self.megaservice = ServiceOrchestrator()
+        self.endpoint = str(MegaServiceEndpoint.CODE_GEN)
+
 
     def add_remote_service(self):
         llm = MicroService(

@@ -14,6 +14,7 @@ export CODEGEN_LLM_MODEL_ID="Qwen/Qwen2.5-Coder-7B-Instruct"
 export MODEL_ID=${CODEGEN_LLM_MODEL_ID}
 
 ### The port of the LLM service. On this port, the LLM service will accept connections
+export CODEGEN_LLM_SERVICE_HOST=${HOST_IP}
 export CODEGEN_LLM_SERVICE_PORT=9000
 
 ### The IP address or domain name of the server for CodeGen MegaService

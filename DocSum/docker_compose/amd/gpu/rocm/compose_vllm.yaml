@@ -89,7 +89,7 @@ services:
     depends_on:
       - docsum-backend-server
     ports:
-      - "5173:5173"
+      - "${DOCSUM_FRONTEND_PORT:-5173}:5173"
     environment:
       - no_proxy=${no_proxy}
       - https_proxy=${https_proxy}

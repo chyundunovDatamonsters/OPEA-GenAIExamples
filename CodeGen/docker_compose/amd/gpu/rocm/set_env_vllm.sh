@@ -8,7 +8,7 @@ export CODEGEN_HOST_IP=10.53.22.29
 export CODEGEN_EXTERNAL_HOST=68.69.180.77
 
 ### A token for accessing repositories with models
-export CODEGEN_HUGGINGFACEHUB_API_TOKEN=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
+export CODEGEN_HUGGINGFACEHUB_API_TOKEN=''
 
 ### Model ID
 export CODEGEN_LLM_MODEL_ID="Qwen/Qwen2.5-Coder-7B-Instruct"

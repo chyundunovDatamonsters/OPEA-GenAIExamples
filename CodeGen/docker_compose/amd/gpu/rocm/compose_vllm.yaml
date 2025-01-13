@@ -45,10 +45,12 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
       vLLM_ENDPOINT: ${CODEGEN_VLLM_ENDPOINT}
+      LLM_ENDPOINT: ${CODEGEN_VLLM_ENDPOINT}
       LLM_MODEL_ID: ${CODEGEN_LLM_MODEL_ID}
       LLM_MODEL: ${CODEGEN_LLM_MODEL_ID}
       HUGGINGFACEHUB_API_TOKEN: ${CODEGEN_HUGGINGFACEHUB_API_TOKEN}
       HF_TOKEN: ${CODEGEN_HUGGINGFACEHUB_API_TOKEN}
+      OPENAI_API_KEY: ${CODEGEN_OPENAI_API_KEY}
     restart: unless-stopped
 
   codegen-backend-server:

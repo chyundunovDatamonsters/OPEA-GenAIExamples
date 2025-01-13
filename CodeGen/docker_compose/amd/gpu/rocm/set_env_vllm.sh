@@ -26,7 +26,7 @@ export CODEGEN_MEGA_SERVICE_HOST_IP=${CODEGEN_HOST_IP}
 export CODEGEN_BACKEND_SERVICE_PORT=18150
 
 ### The URL of CodeGen backend service, used by the frontend service
-export CODEGEN_BACKEND_SERVICE_URL="http://${CODEGEN_HOST_IP}:${CODEGEN_BACKEND_SERVICE_PORT}/v1/codegen"
+export CODEGEN_BACKEND_SERVICE_URL="http://${CODEGEN_EXTERNAL_HOST}:${CODEGEN_BACKEND_SERVICE_PORT}/v1/codegen"
 
 ### The endpoint of the LLM service to which requests to this service will be sent
 export CODEGEN_LLM_SERVICE_HOST_IP=${CODEGEN_HOST_IP}

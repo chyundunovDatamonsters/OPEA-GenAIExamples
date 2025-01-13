@@ -44,7 +44,7 @@ services:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
-      vLLM_ENDPOINT: ${DOCSUM_VLLM_ENDPOINT}
+      vLLM_ENDPOINT: http://docsum-vllm-service:8011
       HUGGINGFACEHUB_API_TOKEN: ${DOCSUM_HUGGINGFACEHUB_API_TOKEN}
       HF_TOKEN: ${DOCSUM_HUGGINGFACEHUB_API_TOKEN}
       MAX_INPUT_TOKENS: ${MAX_INPUT_TOKENS}

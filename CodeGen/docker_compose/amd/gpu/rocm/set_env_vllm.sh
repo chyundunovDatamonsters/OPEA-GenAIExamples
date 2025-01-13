@@ -17,6 +17,7 @@ export CODEGEN_LLM_MODEL_ID="Qwen/Qwen2.5-Coder-7B-Instruct"
 export CODEGEN_LLM_SERVICE_PORT=9000
 export CODEGEN_VLLM_SERVICE_PORT=8081
 export CODEGEN_VLLM_ENDPOINT="http://${CODEGEN_HOST_IP}:${CODEGEN_VLLM_SERVICE_PORT}"
+export CODEGEN_OPENAI_API_KEY=''
 
 ### The IP address or domain name of the server for CodeGen MegaService
 export CODEGEN_MEGA_SERVICE_HOST_IP=${CODEGEN_HOST_IP}

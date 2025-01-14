@@ -52,7 +52,8 @@ services:
       MAX_TOTAL_TOKENS: ${MAX_TOTAL_TOKENS}
       LLM_MODEL_ID: ${DOCSUM_LLM_MODEL_ID}
       LLM_MODEL: ${CODEGEN_LLM_MODEL_ID}
-      LOGFLAG: 'True'
+      LOGFLAG: 'False'
+      DocSum_COMPONENT_NAME: ${DOCSUM_COMPONENT_NAME}
     restart: unless-stopped
 
   whisper:

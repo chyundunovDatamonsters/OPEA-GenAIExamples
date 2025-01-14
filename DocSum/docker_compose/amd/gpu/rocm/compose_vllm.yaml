@@ -51,6 +51,7 @@ services:
       MAX_INPUT_TOKENS: ${MAX_INPUT_TOKENS}
       MAX_TOTAL_TOKENS: ${MAX_TOTAL_TOKENS}
       LLM_MODEL_ID: ${DOCSUM_LLM_MODEL_ID}
+      LLM_MODEL: ${CODEGEN_LLM_MODEL_ID}
     restart: unless-stopped
 
   whisper:

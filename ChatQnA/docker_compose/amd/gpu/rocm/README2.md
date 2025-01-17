@@ -129,9 +129,8 @@ To construct the Mega Service, we utilize the GenAIComps microservice pipeline w
 
 ```
 git clone https://github.com/opea-project/GenAIExamples.git
-cd GenAIExamples/ChatQnA/docker
+cd GenAIExamples/ChatQnA
 docker build --no-cache -t opea/chatqna:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
-cd ../../..
 ```
 
 5. Build UI Docker Image
@@ -141,7 +140,6 @@ Construct the frontend Docker image using the command below:
 ```
 cd GenAIExamples/ChatQnA/ui
 docker build --no-cache -t opea/chatqna-ui:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
-cd ../../../..
 ```
 
 6. Build React UI Docker Image (Optional)
@@ -149,7 +147,6 @@ cd ../../../..
 ```
 cd GenAIExamples/ChatQnA/ui
 docker build --no-cache -t opea/chatqna-react-ui:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
-cd ../../../..
 ```
 
 7. Build Nginx Docker Image

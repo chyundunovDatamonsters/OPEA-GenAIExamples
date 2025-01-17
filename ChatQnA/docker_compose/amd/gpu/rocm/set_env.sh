@@ -4,7 +4,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 export CHATQNA_HUGGINGFACEHUB_API_TOKEN=${HUGGINGFACEHUB_API_TOKEN}
-export CHATQNA_TGI_SERVICE_IMAGE="ghcr.io/huggingface/text-generation-inference:2.3.1-rocm"
 export CHATQNA_EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
 export CHATQNA_RERANK_MODEL_ID="BAAI/bge-reranker-base"
 export CHATQNA_LLM_MODEL_ID="Intel/neural-chat-7b-v3-3"

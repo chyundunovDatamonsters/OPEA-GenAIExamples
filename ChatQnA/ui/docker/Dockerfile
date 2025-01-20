@@ -14,7 +14,7 @@ COPY svelte /home/user/svelte
 WORKDIR /home/user/svelte
 
 # Install front-end dependencies
-RUN npm install --force
+RUN npm install
 
 # Build the front-end application
 RUN npm run build

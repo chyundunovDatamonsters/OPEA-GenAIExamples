@@ -13,6 +13,8 @@ COPY svelte /home/user/svelte
 # Set the working directory
 WORKDIR /home/user/svelte
 
+RUN npm uninstall @sveltejs/adapter-auto@1.0.0-next.75
+
 # Install front-end dependencies
 RUN npm install
 

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Use node 20.11.1 as the base image
-FROM node:20.11.0
+FROM node:20.11.1
 
 # Update package manager and install Git
 RUN apt-get update -y && apt-get install -y git
@@ -14,7 +14,7 @@ COPY svelte /home/user/svelte
 WORKDIR /home/user/svelte
 
 # Install front-end dependencies
-RUN npm install
+RUN npm install --force
 
 # Build the front-end application
 RUN npm run build

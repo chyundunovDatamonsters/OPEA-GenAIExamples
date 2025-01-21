@@ -30,7 +30,7 @@ services:
     ports:
       - "${CHATQNA_TEI_EMBEDDING_PORT}:80"
     volumes:
-      - "/var/opea/chatqna-service/data:/data"
+      - "./data:/data"
     shm_size: 1g
     ipc: host
     environment:
@@ -38,16 +38,6 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     command: --model-id ${CHATQNA_EMBEDDING_MODEL_ID} --auto-truncate
-    devices:
-      - /dev/kfd:/dev/kfd
-      - /dev/dri/card1:/dev/dri/card1
-      - /dev/dri/renderD136:/dev/dri/renderD136
-    cap_add:
-      - SYS_PTRACE
-    group_add:
-      - video
-    security_opt:
-      - seccomp:unconfined
   chatqna-retriever:
     image: ${REGISTRY:-opea}/retriever-redis:${TAG:-latest}
     container_name: chatqna-retriever
@@ -70,7 +60,7 @@ services:
     ports:
       - "${CHATQNA_TEI_RERANKING_PORT}:80"
     volumes:
-      - "/var/opea/chatqna-service/data:/data"
+      - "./data:/data"
     shm_size: 1g
     environment:
       no_proxy: ${no_proxy}
@@ -79,15 +69,6 @@ services:
       HUGGINGFACEHUB_API_TOKEN: ${CHATQNA_HUGGINGFACEHUB_API_TOKEN}
       HF_HUB_DISABLE_PROGRESS_BARS: 1
       HF_HUB_ENABLE_HF_TRANSFER: 0
-    devices:
-      - /dev/kfd:/dev/kfd
-      - /dev/dri/:/dev/dri/
-    cap_add:
-      - SYS_PTRACE
-    group_add:
-      - video
-    security_opt:
-      - seccomp:unconfined
     command: --model-id ${CHATQNA_RERANK_MODEL_ID} --auto-truncate
   chatqna-vllm-service:
     image: ${REGISTRY:-opea}/llm-vllm-rocm:${TAG:-latest}
@@ -105,7 +86,7 @@ services:
       WILM_USE_TRITON_FLASH_ATTENTION: 0
       PYTORCH_JIT: 0
     volumes:
-      - "/var/opea/chatqna-service/data:/data"
+      - "./data:/data"
     shm_size: 128G
     devices:
       - /dev/kfd:/dev/kfd

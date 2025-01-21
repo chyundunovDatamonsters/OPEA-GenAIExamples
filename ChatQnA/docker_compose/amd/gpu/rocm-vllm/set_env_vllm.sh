@@ -5,8 +5,8 @@
 
 # SPDX-License-Identifier: Apache-2.0
 
-export HOST_IP='192.165.1.21'
-export HOST_IP_EXTERNAL='direct-supercomputer1.powerml.co'
+export HOST_IP='10.53.22.29'
+export HOST_IP_EXTERNAL='68.69.180.77'
 export CHATQNA_HUGGINGFACEHUB_API_TOKEN="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"
 export CHATQNA_EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
 export CHATQNA_RERANK_MODEL_ID="BAAI/bge-reranker-base"

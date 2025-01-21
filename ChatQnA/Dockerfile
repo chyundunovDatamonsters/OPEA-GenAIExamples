@@ -17,6 +17,8 @@ RUN useradd -m -s /bin/bash user && \
 WORKDIR /home/user/
 RUN git clone https://github.com/opea-project/GenAIComps.git
 
+RUN cd GenAiComps && git checkout v1.1 && cd ../
+
 WORKDIR /home/user/GenAIComps
 RUN pip install --no-cache-dir --upgrade pip setuptools && \
     pip install --no-cache-dir -r /home/user/GenAIComps/requirements.txt && \

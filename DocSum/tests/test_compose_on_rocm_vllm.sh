@@ -182,33 +182,50 @@ function validate_megaservice() {
     sleep 1s
 }
 
-function validate_megaservice_json() {
-    # Curl the Mega Service
-    echo ""
-    echo ">>> Checking text data with Content-Type: application/json"
-    validate_services \
+function validate_megaservice_text() {
+    echo ">>> Checking text data in json format"
+    validate_services_json \
         "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
         "[DONE]" \
-        "docsum-backend-server" \
-        "docsum-backend-server" \
+        "docsum-xeon-backend-server" \
+        "docsum-xeon-backend-server" \
         '{"type": "text", "messages": "Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'
 
-    echo ">>> Checking audio data"
-    validate_services \
+    echo ">>> Checking text data in form format, set language=en"
+    validate_services_form \
         "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
         "[DONE]" \
-        "docsum-backend-server" \
-        "docsum-backend-server" \
-        "{\"type\": \"audio\",  \"messages\": \"$(input_data_for_test "audio")\"}"
+        "docsum-xeon-backend-server" \
+        "docsum-xeon-backend-server" \
+        "type=text" \
+        "messages=Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5." \
+        "max_tokens=32" \
+        "language=en" \
+        "stream=True"
 
-    echo ">>> Checking video data"
-    validate_services \
+    echo ">>> Checking text data in form format, set language=zh"
+    validate_services_form \
         "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
         "[DONE]" \
-        "docsum-backend-server" \
-        "docsum-backend-server" \
-        "{\"type\": \"video\",  \"messages\": \"$(input_data_for_test "video")\"}"
+        "docsum-xeon-backend-server" \
+        "docsum-xeon-backend-server" \
+        "type=text" \
+        "messages=2024年9月26日，北京——今日，英特尔正式发布英特尔® 至强® 6性能核处理器（代号Granite Rapids），为AI、数据分析、科学计算等计算密集型业务提供卓越性能。" \
+        "max_tokens=32" \
+        "language=zh" \
+        "stream=True"
 
+    echo ">>> Checking text data in form format, upload file"
+    validate_services_form \
+        "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
+        "[DONE]" \
+        "docsum-xeon-backend-server" \
+        "docsum-xeon-backend-server" \
+        "type=text" \
+        "messages=" \
+        "files=@$ROOT_FOLDER/data/short.txt" \
+        "max_tokens=32" \
+        "language=en"
 }
 
 function stop_docker() {

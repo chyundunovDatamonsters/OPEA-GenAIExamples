@@ -10,6 +10,9 @@ echo "TAG=IMAGE_TAG=${IMAGE_TAG}"
 
 WORKPATH=$(dirname "$PWD")
 LOG_PATH="$WORKPATH/tests"
+# Get the root folder of the current script
+ROOT_FOLDER=$(dirname "$(readlink -f "$0")")
+
 ip_address=$(hostname -I | awk '{print $1}')
 export DOCSUM_MAX_INPUT_TOKENS=1024
 export DOCSUM_MAX_TOTAL_TOKENS=2048
@@ -111,10 +114,10 @@ input_data_for_test() {
             echo "THIS IS A TEST >>>> and a number of states are starting to adopt them voluntarily special correspondent john delenco of education week reports it takes just 10 minutes to cross through gillette wyoming this small city sits in the northeast corner of the state surrounded by 100s of miles of prairie but schools here in campbell county are on the edge of something big the next generation science standards you are going to build a strand of dna and you are going to decode it and figure out what that dna actually says for christy mathis at sage valley junior high school the new standards are about learning to think like a scientist there is a lot of really good stuff in them every standard is a performance task it is not you know the child needs to memorize these things it is the student needs to be able to do some pretty intense stuff we are analyzing we are critiquing we are."
             ;;
         ("audio")
-            get_base64_str "$WORKPATH/tests/data/test.wav"
+            get_base64_str "$ROOT_FOLDER/data/test.wav"
             ;;
         ("video")
-            get_base64_str "$WORKPATH/tests/data/test.mp4"
+            get_base64_str "$ROOT_FOLDER/data/test.mp4"
             ;;
         (*)
             echo "Invalid document type" >&2
@@ -123,49 +126,57 @@ input_data_for_test() {
     esac
 }
 
-function validate_microservices() {
-    # Check if the microservices are running correctly.
+function validate_services_json() {
+    local URL="$1"
+    local EXPECTED_RESULT="$2"
+    local SERVICE_NAME="$3"
+    local DOCKER_NAME="$4"
+    local INPUT_DATA="$5"
 
-    # whisper microservice
-    ulimit -s 65536
-    validate_services \
-        "${HOST_IP}:${DOCSUM_WHISPER_PORT}/v1/asr" \
-        '{"asr_result":"well"}' \
-        "whisper-service" \
-        "whisper-service" \
-        "{\"audio\": \"$(input_data_for_test "audio")\"}"
+    local HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST -d "$INPUT_DATA" -H 'Content-Type: application/json' "$URL")
 
-    # vLLM service
-    validate_services \
-        "${HOST_IP}:${DOCSUM_VLLM_SERVICE_PORT}/v1/chat/completions" \
-        "content" \
-        "docsum-vllm-service" \
-        "docsum-vllm-service" \
-        '{"model": "Intel/neural-chat-7b-v3-3", "messages": [{"role": "user", "content": "What is Deep Learning?"}], "max_tokens": 17}'
-
-    # llm microservice
-    validate_services \
-        "${HOST_IP}:${DOCSUM_LLM_SERVER_PORT}/v1/docsum" \
-        "text" \
-        "docsum-llm-server" \
-        "docsum-llm-server" \
-        '{"messages":"Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'
-}
-
-function validate_megaservice() {
-    local SERVICE_NAME="docsum-backend-server"
-    local DOCKER_NAME="docsum-backend-server"
-    local EXPECTED_RESULT="[DONE]"
-    local INPUT_DATA="messages=Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."
-    local URL="${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum"
-    local DATA_TYPE="type=text"
-
-    local HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST -F "$DATA_TYPE" -F "$INPUT_DATA" -H 'Content-Type: multipart/form-data' "$URL")
+    echo "==========================================="
 
     if [ "$HTTP_STATUS" -eq 200 ]; then
         echo "[ $SERVICE_NAME ] HTTP status is 200. Checking content..."
 
-        local CONTENT=$(curl -s -X POST -F "$DATA_TYPE" -F "$INPUT_DATA" -H 'Content-Type: multipart/form-data' "$URL" | tee ${LOG_PATH}/${SERVICE_NAME}.log)
+        local CONTENT=$(curl -s -X POST -d "$INPUT_DATA" -H 'Content-Type: application/json' "$URL" | tee ${LOG_PATH}/${SERVICE_NAME}.log)
+
+        if echo "$CONTENT" | grep -q "$EXPECTED_RESULT"; then
+            echo "[ $SERVICE_NAME ] Content is as expected."
+        else
+            echo "EXPECTED_RESULT==> $EXPECTED_RESULT"
+            echo "CONTENT==> $CONTENT"
+            echo "[ $SERVICE_NAME ] Content does not match the expected result: $CONTENT"
+            docker logs ${DOCKER_NAME} >> ${LOG_PATH}/${SERVICE_NAME}.log
+            exit 1
+
+        fi
+    else
+        echo "[ $SERVICE_NAME ] HTTP status is not 200. Received status was $HTTP_STATUS"
+        docker logs ${DOCKER_NAME} >> ${LOG_PATH}/${SERVICE_NAME}.log
+        exit 1
+    fi
+    sleep 1s
+}
+
+function validate_services_form() {
+    local URL="$1"
+    local EXPECTED_RESULT="$2"
+    local SERVICE_NAME="$3"
+    local DOCKER_NAME="$4"
+    local FORM_DATA1="$5"
+    local FORM_DATA2="$6"
+    local FORM_DATA3="$7"
+    local FORM_DATA4="$8"
+    local FORM_DATA5="$9"
+
+    local HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST -F "$FORM_DATA1" -F "$FORM_DATA2" -F "$FORM_DATA3" -F "$FORM_DATA4" -F "$FORM_DATA5" -H 'Content-Type: multipart/form-data' "$URL")
+
+    if [ "$HTTP_STATUS" -eq 200 ]; then
+        echo "[ $SERVICE_NAME ] HTTP status is 200. Checking content..."
+
+        local CONTENT=$(curl -s -X POST -F "$FORM_DATA1" -F "$FORM_DATA2" -F "$FORM_DATA3" -F "$FORM_DATA4" -F "$FORM_DATA5" -H 'Content-Type: multipart/form-data' "$URL" | tee ${LOG_PATH}/${SERVICE_NAME}.log)
 
         if echo "$CONTENT" | grep -q "$EXPECTED_RESULT"; then
             echo "[ $SERVICE_NAME ] Content is as expected."
@@ -182,21 +193,50 @@ function validate_megaservice() {
     sleep 1s
 }
 
+function validate_microservices() {
+    # Check if the microservices are running correctly.
+
+    # tgi for llm service
+    validate_services \
+        "${HOST_IP}:${DOCSUM_VLLM_SERVICE_PORT}/v1/chat/completions" \
+        "content" \
+        "docsum-vllm-service" \
+        "docsum-vllm-service" \
+        '{"model": "Intel/neural-chat-7b-v3-3", "messages": [{"role": "user", "content": "What is Deep Learning?"}], "max_tokens": 17}'
+
+    # llm microservice
+    validate_services_json \
+        "${HOST_IP}:${DOCSUM_LLM_SERVER_PORT}/v1/docsum" \
+        "text" \
+        "llm-docsum-server" \
+        "llm-docsum-server" \
+        '{"messages":"Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'
+
+    # whisper microservice
+    ulimit -s 65536
+    validate_services_json \
+        "${HOST_IP}:${DOCSUM_WHISPER_PORT}/v1/asr" \
+        '{"asr_result":"well"}' \
+        "whisper" \
+        "whisper-server" \
+        "{\"audio\": \"$(input_data_for_test "audio")\"}"
+}
+
 function validate_megaservice_text() {
     echo ">>> Checking text data in json format"
     validate_services_json \
         "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
         "[DONE]" \
-        "docsum-xeon-backend-server" \
-        "docsum-xeon-backend-server" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
         '{"type": "text", "messages": "Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'
 
     echo ">>> Checking text data in form format, set language=en"
     validate_services_form \
         "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
         "[DONE]" \
-        "docsum-xeon-backend-server" \
-        "docsum-xeon-backend-server" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
         "type=text" \
         "messages=Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5." \
         "max_tokens=32" \
@@ -207,8 +247,8 @@ function validate_megaservice_text() {
     validate_services_form \
         "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
         "[DONE]" \
-        "docsum-xeon-backend-server" \
-        "docsum-xeon-backend-server" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
         "type=text" \
         "messages=2024年9月26日，北京——今日，英特尔正式发布英特尔® 至强® 6性能核处理器（代号Granite Rapids），为AI、数据分析、科学计算等计算密集型业务提供卓越性能。" \
         "max_tokens=32" \
@@ -219,13 +259,117 @@ function validate_megaservice_text() {
     validate_services_form \
         "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
         "[DONE]" \
-        "docsum-xeon-backend-server" \
-        "docsum-xeon-backend-server" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
         "type=text" \
         "messages=" \
         "files=@$ROOT_FOLDER/data/short.txt" \
         "max_tokens=32" \
         "language=en"
+}
+
+function validate_megaservice_multimedia() {
+    echo ">>> Checking audio data in json format"
+    validate_services_json \
+        "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
+        "[DONE]" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
+        "{\"type\": \"audio\",  \"messages\": \"$(input_data_for_test "audio")\"}"
+
+    echo ">>> Checking audio data in form format"
+    validate_services_form \
+        "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
+        "[DONE]" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
+        "type=audio" \
+        "messages=UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" \
+        "max_tokens=32" \
+        "language=en" \
+        "stream=True"
+
+    echo ">>> Checking video data in json format"
+    validate_services_json \
+        "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
+        "[DONE]" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
+        "{\"type\": \"video\",  \"messages\": \"$(input_data_for_test "video")\"}"
+
+    echo ">>> Checking video data in form format"
+    validate_services_form \
+        "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
+        "[DONE]" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
+        "type=video" \
+        "messages=\"$(input_data_for_test "video")\"" \
+        "max_tokens=32" \
+        "language=en" \
+        "stream=True"
+}
+
+function validate_megaservice_long_text() {
+    echo ">>> Checking long text data in form format, set summary_type=auto"
+    validate_services_form \
+        "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
+        "[DONE]" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
+        "type=text" \
+        "messages=" \
+        "files=@$ROOT_FOLDER/data/long.txt" \
+        "max_tokens=128" \
+        "summary_type=auto"
+
+    echo ">>> Checking long text data in form format, set summary_type=stuff"
+    validate_services_form \
+        "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
+        "[DONE]" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
+        "type=text" \
+        "messages=" \
+        "files=@$ROOT_FOLDER/data/long.txt" \
+        "max_tokens=128" \
+        "summary_type=stuff"
+
+    echo ">>> Checking long text data in form format, set summary_type=truncate"
+    validate_services_form \
+        "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
+        "[DONE]" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
+        "type=text" \
+        "messages=" \
+        "files=@$ROOT_FOLDER/data/long.txt" \
+        "max_tokens=128" \
+        "summary_type=truncate"
+
+    echo ">>> Checking long text data in form format, set summary_type=map_reduce"
+    validate_services_form \
+        "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
+        "[DONE]" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
+        "type=text" \
+        "messages=" \
+        "files=@$ROOT_FOLDER/data/long.txt" \
+        "max_tokens=128" \
+        "summary_type=map_reduce"
+
+    echo ">>> Checking long text data in form format, set summary_type=refine"
+    validate_services_form \
+        "${HOST_IP}:${DOCSUM_BACKEND_SERVER_PORT}/v1/docsum" \
+        "[DONE]" \
+        "docsum-backend-server" \
+        "docsum-backend-server" \
+        "type=text" \
+        "messages=" \
+        "files=@$ROOT_FOLDER/data/long.txt" \
+        "max_tokens=128" \
+        "summary_type=refine"
 }
 
 function stop_docker() {
@@ -234,8 +378,8 @@ function stop_docker() {
 }
 
 function main() {
-    echo "==========================================="
-    echo ">>>> Stopping any running Docker containers..."
+#    echo "==========================================="
+#    echo ">>>> Stopping any running Docker containers..."
 #    stop_docker
 #
 #    echo "==========================================="
@@ -253,12 +397,18 @@ function main() {
     validate_microservices
 
     echo "==========================================="
-    echo ">>>> Validating megaservice..."
-    validate_megaservice
-    echo ">>>> Validating validate_megaservice_json..."
-    validate_megaservice_json
+    echo ">>>> Validating megaservice for text..."
+    validate_megaservice_text
 
     echo "==========================================="
+    echo ">>>> Validating megaservice for multimedia..."
+    validate_megaservice_multimedia
+
+    echo "==========================================="
+    echo ">>>> Validating megaservice for long text..."
+    validate_megaservice_long_text
+
+#    echo "==========================================="
 #    echo ">>>> Stopping Docker containers..."
 #    stop_docker
 #

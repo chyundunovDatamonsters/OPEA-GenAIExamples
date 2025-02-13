@@ -139,7 +139,7 @@ function validate_microservices() {
     # vLLM service
     validate_services \
         "${HOST_IP}:${DOCSUM_VLLM_SERVICE_PORT}/v1/chat/completions" \
-        "generated_text" \
+        "content" \
         "docsum-vllm-service" \
         "docsum-vllm-service" \
         '{"model": "Intel/neural-chat-7b-v3-3", "messages": [{"role": "user", "content": "What is Deep Learning?"}], "max_tokens": 17}'

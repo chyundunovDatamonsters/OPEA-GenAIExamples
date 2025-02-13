@@ -54,6 +54,7 @@ services:
       LOGFLAG: ${DOCSUM_LOGFLAG:-False}
       MAX_INPUT_TOKENS: ${DOCSUM_MAX_INPUT_TOKENS}
       MAX_TOTAL_TOKENS: ${DOCSUM_MAX_TOTAL_TOKENS}
+      DocSum_COMPONENT_NAME: ${DocSum_COMPONENT_NAME:-OpeaDocSumvLLM}
     restart: unless-stopped
 
   whisper-service:

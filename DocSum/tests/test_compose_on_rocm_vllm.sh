@@ -54,7 +54,15 @@ function start_services() {
     sed -i "s/backend_address/$ip_address/g" "$WORKPATH"/ui/svelte/.env
     # Start Docker Containers
     docker compose up -d > "${LOG_PATH}"/start_services_with_compose.log
-    sleep 1m
+    n=0
+    until [[ "$n" -ge 500 ]]; do
+        docker logs docsum-vllm-service >& "${LOG_PATH}"/docsum-vllm-service_start.log
+        if grep -q "Application startup complete" "${LOG_PATH}"/docsum-vllm-service_start.log; then
+            break
+        fi
+        sleep 10s
+        n=$((n+1))
+    done
 }
 
 function validate_services() {

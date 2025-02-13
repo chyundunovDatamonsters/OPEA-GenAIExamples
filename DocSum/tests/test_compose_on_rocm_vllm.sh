@@ -11,8 +11,8 @@ echo "TAG=IMAGE_TAG=${IMAGE_TAG}"
 WORKPATH=$(dirname "$PWD")
 LOG_PATH="$WORKPATH/tests"
 ip_address=$(hostname -I | awk '{print $1}')
-export MAX_INPUT_TOKENS=1024
-export MAX_TOTAL_TOKENS=2048
+export DOCSUM_MAX_INPUT_TOKENS=1024
+export DOCSUM_MAX_TOTAL_TOKENS=2048
 export DOCSUM_LLM_MODEL_ID="Intel/neural-chat-7b-v3-3"
 export HOST_IP=${ip_address}
 export DOCSUM_VLLM_SERVICE_PORT="8008"

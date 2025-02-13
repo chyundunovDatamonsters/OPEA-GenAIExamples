@@ -52,10 +52,10 @@ function build_docker_images() {
 }
 
 function start_services() {
-    cd "$WORKPATH"/docker_compose/amd/gpu/rocm-vllm
+    cd "$WORKPATH"/docker_compose/amd/gpu/rocm
     sed -i "s/backend_address/$ip_address/g" "$WORKPATH"/ui/svelte/.env
     # Start Docker Containers
-    docker compose up -d > "${LOG_PATH}"/start_services_with_compose.log
+    docker compose -f compose_vllm.yaml up -d > "${LOG_PATH}"/start_services_with_compose.log
     n=0
     until [[ "$n" -ge 500 ]]; do
         docker logs docsum-vllm-service >& "${LOG_PATH}"/docsum-vllm-service_start.log
@@ -373,8 +373,8 @@ function validate_megaservice_long_text() {
 }
 
 function stop_docker() {
-    cd $WORKPATH/docker_compose/amd/gpu/rocm-vllm/
-    docker compose stop && docker compose rm -f
+    cd $WORKPATH/docker_compose/amd/gpu/rocm/
+    docker compose -f compose_vllm.yaml stop && docker compose rm -f
 }
 
 function main() {

@@ -9,10 +9,10 @@ services:
       - "${NEO4J_PORT1:-7474}:7474"
       - "${NEO4J_PORT2:-7687}:7687"
     volumes:
-        - ./data/neo4j/logs:/logs
-        - ./data/neo4j/config:/config
-        - ./data/neo4j/data:/data
-        - ./data/neo4j/plugins:/plugins
+      - ./data/neo4j/logs:/logs
+      - ./data/neo4j/config:/config
+      - ./data/neo4j/data:/data
+      - ./data/neo4j/plugins:/plugins
     ipc: host
     environment:
       no_proxy: ${no_proxy}
@@ -27,7 +27,7 @@ services:
       NEO4J_server_bolt_advertised__address: "${HOST_IP}:${NEO4J_PORT2}"
     restart: always
     healthcheck:
-      test: wget http://${HOST_IP}:${NEO4J_PORT1} || exit 1
+      test: "wget http://${HOST_IP}:${NEO4J_PORT1} || exit 1"
       interval: 5s
       timeout: 10s
       retries: 20

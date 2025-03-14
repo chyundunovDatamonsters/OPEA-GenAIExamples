@@ -26,12 +26,7 @@ services:
       - NEO4J_dbms_security_procedures_unrestricted=apoc.\*
       - NEO4J_server_bolt_advertised__address=${HOST_IP}:${NEO4J_PORT2}
     restart: always
-    healthcheck:
-      test: "wget http://${HOST_IP}:${NEO4J_PORT1} || exit 1"
-      interval: 5s
-      timeout: 10s
-      retries: 20
-      start_period: 3s
+
   tei-embedding-serving:
     image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.5
     container_name: tei-embedding-serving
@@ -47,11 +42,6 @@ services:
       https_proxy: ${https_proxy}
       host_ip: ${host_ip}
       HF_TOKEN: ${HF_TOKEN}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://${HOST_IP}:${TEI_EMBEDDER_PORT}/health"]
-      interval: 10s
-      timeout: 6s
-      retries: 48
 
   vllm-service:
     image: ${REGISTRY:-opea}/vllm-rocm:${TAG:-latest}

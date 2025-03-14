@@ -129,10 +129,8 @@ services:
       VDMS_USE_CLIP: 0
       host_ip: ${HOST_IP}
     depends_on:
-      neo4j-apoc:
-        condition: service_healthy
-      tei-embedding-serving:
-        condition: service_healthy
+      - neo4j-apoc
+      - tei-embedding-serving
 
   graphrag-backend-server:
     image: ${REGISTRY:-opea}/graphrag:${TAG:-latest}

@@ -90,8 +90,6 @@ services:
     depends_on:
       neo4j-apoc:
         condition: service_healthy
-      tgi-gaudi-server:
-        condition: service_healthy
       tei-embedding-serving:
         condition: service_healthy
     ports:
@@ -147,8 +145,6 @@ services:
         condition: service_healthy
       tei-embedding-serving:
         condition: service_healthy
-      tgi-gaudi-server:
-        condition: service_healthy
 
   graphrag-backend-server:
     image: ${REGISTRY:-opea}/graphrag:${TAG:-latest}
@@ -157,7 +153,7 @@ services:
       - neo4j-apoc
       - tei-embedding-serving
       - retriever-neo4j
-      - tgi-gaudi-server
+      - vllm-service
     ports:
       - "${MEGA_SERVICE_PORT:-8888}:8888"
     environment:

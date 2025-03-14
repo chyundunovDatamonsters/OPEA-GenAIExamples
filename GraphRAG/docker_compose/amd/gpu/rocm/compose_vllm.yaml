@@ -15,16 +15,16 @@ services:
       - ./data/neo4j/plugins:/plugins
     ipc: host
     environment:
-      no_proxy: ${no_proxy}
-      http_proxy: ${http_proxy}
-      https_proxy: ${https_proxy}
-      NEO4J_AUTH: ${NEO4J_USERNAME}/${NEO4J_PASSWORD}
-      NEO4J_PLUGINS: ["apoc"]
-      NEO4J_apoc_export_file_enabled: "true"
-      NEO4J_apoc_import_file_enabled: "true"
-      NEO4J_apoc_import_file_use__neo4j__config: "true"
-      NEO4J_dbms_security_procedures_unrestricted: "apoc.\*"
-      NEO4J_server_bolt_advertised__address: "${HOST_IP}:${NEO4J_PORT2}"
+      - no_proxy=${no_proxy}
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - NEO4J_AUTH=${NEO4J_USERNAME}/${NEO4J_PASSWORD}
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.\*
+      - NEO4J_server_bolt_advertised__address=${HOST_IP}:${NEO4J_PORT2}
     restart: always
     healthcheck:
       test: "wget http://${HOST_IP}:${NEO4J_PORT1} || exit 1"
